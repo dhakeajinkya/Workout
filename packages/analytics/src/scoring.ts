@@ -71,11 +71,15 @@ function singleLiftScore(
   const expectedPLTotal = oneRepMax / ratio;
   const coeff = formula === 'dots' ? dotsCoefficient(bw) : wilksCoefficient(bw);
   const points = expectedPLTotal * coeff;
-  // Scale to 0-125 range: raw DOTS/Wilks ~200-500 for competitive lifters → /4 → 50-125
-  return (points * ageAdjustment(age)) / 4;
+  // Scale to 0-125 range using formula-specific divisor
+  const divisor = formula === 'dots' ? 2.9 : 4;
+  return (points * ageAdjustment(age)) / divisor;
 }
 
-// --- Level Thresholds ---
+// --- Level Thresholds (calibrated at ~83kg reference bodyweight) ---
+// DOTS thresholds derived from Wilks originals using the ratio
+// dots_coeff(83)/wilks_coeff(83) ≈ 0.726, then recalibrated so
+// classifications remain consistent across both formulas.
 export const LEVEL_THRESHOLDS: [number, StrengthLevel][] = [
   [125, 'World Class'],
   [112.5, 'Elite'],

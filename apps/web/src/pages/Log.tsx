@@ -247,7 +247,12 @@ export default function Log() {
       for (const set of completedSets) await addLift(set);
       await refreshLocalLifts();
       setStatus(`Workout saved! ${completedSets.length} sets logged.`);
-      setTimeout(() => setStatus(''), 3000);
+      // Reset page state
+      if (program) {
+        setExercises(programDayToWorkout(program[selectedDay]));
+        setWorkoutStarted(false);
+      }
+      setTimeout(() => setStatus(''), 4000);
     } catch {
       setStatus('Error saving workout');
     } finally {
@@ -257,12 +262,17 @@ export default function Log() {
 
   const handleExport = async () => {
     const csv = await exportLiftsAsCSV();
-    if (!csv) { setStatus('No local data to export'); return; }
+    if (!csv) { setStatus('No local data to export'); setTimeout(() => setStatus(''), 2000); return; }
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; a.download = `ironlogs-${date}.csv`;
     a.click(); URL.revokeObjectURL(url);
+    // Clear IndexedDB after successful export
+    await clearLocalLifts();
+    await refreshLocalLifts();
+    setStatus('Exported & local data cleared');
+    setTimeout(() => setStatus(''), 3000);
   };
 
   if (loading || !program) {
