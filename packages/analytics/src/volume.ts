@@ -42,7 +42,10 @@ export function groupByDay(entries: LiftEntry[]): DaySession[] {
 export function getLatestBodyweight(entries: LiftEntry[]): number {
   if (entries.length === 0) return 0;
   const sorted = [...entries].sort((a, b) => b.date.localeCompare(a.date));
-  return sorted[0].bodyweight;
+  for (const e of sorted) {
+    if (e.bodyweight > 0) return e.bodyweight;
+  }
+  return 0;
 }
 
 export function getAllUniqueLifts(entries: LiftEntry[]): string[] {
