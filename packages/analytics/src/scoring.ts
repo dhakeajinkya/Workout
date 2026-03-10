@@ -1,6 +1,21 @@
 import type { StrengthLevel } from '@ironlogs/core';
 
-// --- Wilks Coefficient (Males) ---
+// --- DOTS Coefficient (Males) ---
+// From the DOTS formula adopted by IPF in 2019 as the replacement for Wilks.
+// Haleczko, A. (2019). The DOTS formula for comparing performances across
+// bodyweights in powerlifting.
+function dotsCoefficient(bw: number): number {
+  const a = -307.75076;
+  const b = 24.990210;
+  const c = -0.1467220;
+  const d = 0.0007405380;
+  const e = -0.0000017452;
+  const denom = a + b * bw + c * bw ** 2 + d * bw ** 3 + e * bw ** 4;
+  if (denom <= 0) return 0;
+  return 500 / denom;
+}
+
+// --- Wilks Coefficient (Males, legacy) ---
 function wilksCoefficient(bw: number): number {
   const a = -216.0475144;
   const b = 16.2606339;
@@ -12,6 +27,8 @@ function wilksCoefficient(bw: number): number {
   if (denom <= 0) return 0;
   return 500 / denom;
 }
+
+export type ScoringFormula = 'dots' | 'wilks';
 
 // --- Lift Ratios (% of Powerlifting Total, Males) ---
 export const LIFT_RATIOS: Record<string, number> = {
@@ -36,12 +53,26 @@ function ageAdjustment(age: number): number {
   return 0.000468 * age * age - 0.0300 * age + 1.45;
 }
 
-function singleLiftScore(bw: number, liftName: string, oneRepMax: number, age: number = 30): number {
+/**
+ * Compute a normalized strength score for a single lift.
+ *
+ * Pipeline: 1RM → estimated PL total (via lift ratio) → bodyweight-normalized
+ * points (DOTS or Wilks) → age-adjusted → scaled to 0-125 range.
+ *
+ * The /4 scaling maps raw DOTS/Wilks points (typically 200-500 for competitive
+ * lifters) onto the 0-125 level scale: 500 DOTS → 125 = World Class.
+ */
+function singleLiftScore(
+  bw: number, liftName: string, oneRepMax: number,
+  age: number = 30, formula: ScoringFormula = 'dots',
+): number {
   const ratio = LIFT_RATIOS[liftName];
   if (!ratio || bw <= 0 || oneRepMax <= 0) return 0;
   const expectedPLTotal = oneRepMax / ratio;
-  const wilks = expectedPLTotal * wilksCoefficient(bw);
-  return (wilks * ageAdjustment(age)) / 4;
+  const coeff = formula === 'dots' ? dotsCoefficient(bw) : wilksCoefficient(bw);
+  const points = expectedPLTotal * coeff;
+  // Scale to 0-125 range: raw DOTS/Wilks ~200-500 for competitive lifters → /4 → 50-125
+  return (points * ageAdjustment(age)) / 4;
 }
 
 // --- Level Thresholds ---
@@ -87,14 +118,16 @@ export function getLevel(score: number): { level: StrengthLevel; color: string }
  * Calculate a normalized strength score for a single lift.
  *
  * Projects the lift's 1RM to an estimated powerlifting total using known lift
- * ratios, applies the Wilks coefficient to normalize for bodyweight, and adjusts
- * for age (quadratic curves for juniors <23 and masters >40). The result is
- * divided by 4 to produce a 0-125+ scale matching the level thresholds.
+ * ratios, applies DOTS (default) or Wilks coefficient to normalize for
+ * bodyweight, and adjusts for age (quadratic curves for juniors <23 and
+ * masters >40). The result is scaled to a 0-125+ range matching the level
+ * thresholds.
  *
  * @param lift - Canonical lift name (must exist in LIFT_RATIOS)
  * @param oneRepMax - Estimated or actual one-rep max
  * @param bodyweight - Lifter's bodyweight in kg
  * @param age - Lifter's age in years (default 30, no adjustment applied 23-40)
+ * @param formula - Scoring formula: 'dots' (default, IPF standard) or 'wilks' (legacy)
  * @returns Score (0-125+), strength level label, and associated color
  */
 export function calcLiftScore(
@@ -102,13 +135,14 @@ export function calcLiftScore(
   oneRepMax: number,
   bodyweight: number,
   age: number = 30,
-): { score: number; level: StrengthLevel; color: string } {
+  formula: ScoringFormula = 'dots',
+): { score: number; level: StrengthLevel; color: string; estimated1RM: number } {
   if (bodyweight <= 0 || oneRepMax <= 0 || !LIFT_RATIOS[lift]) {
-    return { score: 0, level: 'Subpar', color: LEVEL_COLORS['Subpar'] };
+    return { score: 0, level: 'Subpar', color: LEVEL_COLORS['Subpar'], estimated1RM: oneRepMax };
   }
-  const score = Math.round(singleLiftScore(bodyweight, lift, oneRepMax, age) * 10) / 10;
+  const score = Math.round(singleLiftScore(bodyweight, lift, oneRepMax, age, formula) * 10) / 10;
   const { level, color } = getLevel(score);
-  return { score, level, color };
+  return { score, level, color, estimated1RM: oneRepMax };
 }
 
 /**

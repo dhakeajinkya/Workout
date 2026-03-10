@@ -41,4 +41,14 @@ describe('estimate1RM (Wathan formula)', () => {
   it('returns higher estimate for more reps at same weight', () => {
     expect(estimate1RM(100, 10)).toBeGreaterThan(estimate1RM(100, 5));
   });
+
+  it('returns 0 for reps above 12 (hypertrophy guard)', () => {
+    expect(estimate1RM(100, 13)).toBe(0);
+    expect(estimate1RM(100, 20)).toBe(0);
+    expect(estimate1RM(35, 25)).toBe(0);
+  });
+
+  it('still works at exactly 12 reps', () => {
+    expect(estimate1RM(100, 12)).toBeGreaterThan(0);
+  });
 });

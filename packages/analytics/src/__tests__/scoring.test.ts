@@ -39,6 +39,26 @@ describe('calcLiftScore', () => {
     // Age adjustment for young lifters differs from prime
     expect(young.score).not.toBe(prime.score);
   });
+
+  it('defaults to DOTS formula', () => {
+    const dots = calcLiftScore('bench', 100, 80);
+    const dotsExplicit = calcLiftScore('bench', 100, 80, 30, 'dots');
+    expect(dots.score).toBe(dotsExplicit.score);
+  });
+
+  it('accepts wilks as legacy formula', () => {
+    const dots = calcLiftScore('bench', 100, 80, 30, 'dots');
+    const wilks = calcLiftScore('bench', 100, 80, 30, 'wilks');
+    // Both should produce positive scores but differ
+    expect(dots.score).toBeGreaterThan(0);
+    expect(wilks.score).toBeGreaterThan(0);
+    expect(dots.score).not.toBe(wilks.score);
+  });
+
+  it('includes estimated1RM in result', () => {
+    const result = calcLiftScore('bench', 100, 80);
+    expect(result.estimated1RM).toBe(100);
+  });
 });
 
 describe('calcOverallScore', () => {

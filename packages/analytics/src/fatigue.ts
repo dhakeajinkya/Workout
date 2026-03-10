@@ -1,6 +1,7 @@
 import type { LiftEntry } from '@ironlogs/core';
 import { normalizeLiftName } from '@ironlogs/csv-parser';
 import { groupByDay } from './volume.js';
+import { estimate1RM } from './e1rm.js';
 
 export interface FatigueData {
   acwr: number;
@@ -43,11 +44,20 @@ function ewmaFatigue(
   return chronic > 0 ? { acute, chronic } : null;
 }
 
+/**
+ * Classify ACWR into training zones for strength sports.
+ *
+ * Uses tighter thresholds than field sports literature (Gabbett, 2016):
+ * - <0.8: detraining (insufficient stimulus)
+ * - 0.8-1.2: optimal training zone
+ * - 1.2-1.4: elevated fatigue (monitor closely)
+ * - >1.4: deload recommended
+ */
 function classifyACWR(acwr: number): { status: FatigueData['status']; label: string; color: string } {
   if (acwr < 0.8) return { status: 'detraining', label: 'Detraining', color: '#42a5f5' };
-  if (acwr <= 1.3) return { status: 'fresh', label: 'Sweet Spot', color: '#66bb6a' };
-  if (acwr <= 1.5) return { status: 'moderate', label: 'Moderate', color: '#ffa726' };
-  return { status: 'high', label: 'High', color: '#ef5350' };
+  if (acwr <= 1.2) return { status: 'fresh', label: 'Optimal', color: '#66bb6a' };
+  if (acwr <= 1.4) return { status: 'moderate', label: 'Elevated Fatigue', color: '#ffa726' };
+  return { status: 'high', label: 'Deload Recommended', color: '#ef5350' };
 }
 
 /**
@@ -102,11 +112,18 @@ export function calcLiftFatigue(entries: LiftEntry[], lift: string): LiftFatigue
   const sessions = groupByDay(entries);
   if (sessions.length === 0) return null;
 
+  // Use intensity-weighted load: weight × reps × (weight / estimated1RM).
+  // This weights heavy sets higher than light sets at equal tonnage, better
+  // reflecting neural fatigue in strength training (100×5×5 fatigues more
+  // than 60×20×5 despite similar tonnage).
   const loadByDate = new Map<string, number>();
   for (const s of sessions) {
     let load = 0;
     for (const e of s.lifts) {
-      if (group.includes(normalizeLiftName(e.lift))) load += e.weight * e.reps;
+      if (!group.includes(normalizeLiftName(e.lift))) continue;
+      const e1rm = estimate1RM(e.weight, e.reps);
+      const intensity = e1rm > 0 ? e.weight / e1rm : 0.5;
+      load += e.weight * e.reps * intensity;
     }
     if (load > 0) loadByDate.set(s.date, load);
   }

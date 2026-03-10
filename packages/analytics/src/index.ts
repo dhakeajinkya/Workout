@@ -1,10 +1,11 @@
 // 1RM
-export { estimate1RM } from './e1rm.js';
+export { estimate1RM, MAX_REPS_FOR_1RM } from './e1rm.js';
 
 // Scoring
 export {
   calcLiftScore, calcOverallScore, getLevel,
   LIFT_RATIOS, LEVEL_THRESHOLDS, LEVELS, LEVEL_COLORS, SCORING_CATEGORIES,
+  type ScoringFormula,
 } from './scoring.js';
 
 // Muscles
