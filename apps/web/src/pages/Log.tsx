@@ -55,6 +55,11 @@ const ACCESSORY_OPTIONS = [
 
 function parseProgramJSON(data: any): ProgramDay[] {
   return data.days.map((day: any) => {
+    // Skip rest days — no exercises to parse
+    if (day.rest) {
+      return { name: day.name, label: day.label, exercises: [] };
+    }
+
     const exercises: ProgramExercise[] = [];
 
     // T1
@@ -89,6 +94,16 @@ function parseProgramJSON(data: any): ProgramDay[] {
   });
 }
 
+function nextTrainingDay(index: number, programDays: ProgramDay[]): number {
+  // Skip past rest days to find next training day
+  let next = index;
+  for (let i = 0; i < programDays.length; i++) {
+    if (programDays[next].exercises.length > 0) return next;
+    next = (next + 1) % programDays.length;
+  }
+  return 0;
+}
+
 function detectNextDay(entries: any[], programDays: ProgramDay[]): number {
   const sessions = groupByDay(entries);
   if (sessions.length === 0) return 0;
@@ -107,12 +122,12 @@ function detectNextDay(entries: any[], programDays: ProgramDay[]): number {
 
     const dayHas1Plus = day.exercises[0].sets.some(s => String(s.reps) === '1+');
     if (dayT1 === 'bench') {
-      if (had1Plus === dayHas1Plus) return (i + 1) % programDays.length;
+      if (had1Plus === dayHas1Plus) return nextTrainingDay((i + 1) % programDays.length, programDays);
     } else if (dayT1 === 'deadlift') {
       const dayHas1PlusAmrap = day.exercises[0].sets.some(s => String(s.reps) === '1+');
-      if (had1Plus === dayHas1PlusAmrap) return (i + 1) % programDays.length;
+      if (had1Plus === dayHas1PlusAmrap) return nextTrainingDay((i + 1) % programDays.length, programDays);
     } else {
-      return (i + 1) % programDays.length;
+      return nextTrainingDay((i + 1) % programDays.length, programDays);
     }
   }
   return 0;
@@ -342,9 +357,11 @@ export default function Log() {
         )}
       </div>
 
-      {/* Day selector */}
+      {/* Day selector — skip rest days */}
       <div className="flex gap-2 mb-4 flex-wrap">
-        {program.map((_, i) => (
+        {program.filter(d => d.exercises.length > 0).map((d) => {
+          const i = program.indexOf(d);
+          return (
           <button
             key={i}
             onClick={() => setSelectedDay(i)}
@@ -356,7 +373,8 @@ export default function Log() {
           >
             D{i + 1}
           </button>
-        ))}
+          );
+        })}
       </div>
 
       {/* Date + Bodyweight + Sleep */}
