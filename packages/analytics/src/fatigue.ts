@@ -122,7 +122,8 @@ export function calcLiftFatigue(entries: LiftEntry[], lift: string): LiftFatigue
     for (const e of s.lifts) {
       if (!group.includes(normalizeLiftName(e.lift))) continue;
       const e1rm = estimate1RM(e.weight, e.reps);
-      const intensity = e1rm > 0 ? e.weight / e1rm : 0.5;
+      const rawIntensity = e1rm > 0 ? e.weight / e1rm : 0.5;
+      const intensity = Math.max(0.3, Math.min(1.2, rawIntensity));
       load += e.weight * e.reps * intensity;
     }
     if (load > 0) loadByDate.set(s.date, load);

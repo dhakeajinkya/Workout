@@ -59,10 +59,15 @@ export interface PluginImporter {
   parse: (text: string) => LiftEntry[];
 }
 
+/** Current plugin API version. Plugins declare the API version they target. */
+export const PLUGIN_API_VERSION = 1;
+
 /** The main plugin interface */
 export interface IronLogsPlugin {
   name: string;
   version: string;
+  /** Target API version for forward compatibility checks */
+  apiVersion?: number;
   description?: string;
 
   /** Additional metrics */
@@ -85,6 +90,12 @@ export interface IronLogsPlugin {
 const plugins = new Map<string, IronLogsPlugin>();
 
 export function registerPlugin(plugin: IronLogsPlugin): void {
+  if (plugin.apiVersion && plugin.apiVersion > PLUGIN_API_VERSION) {
+    console.warn(
+      `Plugin "${plugin.name}" targets API v${plugin.apiVersion} but runtime is v${PLUGIN_API_VERSION}. ` +
+      `Some features may not work.`,
+    );
+  }
   plugins.set(plugin.name, plugin);
 }
 
