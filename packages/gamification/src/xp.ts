@@ -3,7 +3,7 @@
  */
 
 import type { LiftEntry } from '@ironlogs/core';
-import { groupByDay, findPRs } from '@ironlogs/analytics';
+import { groupByDay, findPRs, calcWeeklyStreak } from '@ironlogs/analytics';
 
 // ─── XP System ──────────────────────────────────────────────
 
@@ -50,21 +50,9 @@ export function calcXPProfile(entries: LiftEntry[]): XPProfile {
     for (const date of findPRs(entries, lift)) allPRs.add(date);
   }
 
-  // Build streak map
-  const dateSet = new Set(sessions.map((s) => s.date));
-  const sortedDates = Array.from(dateSet).sort();
-  const streakOnDate = new Map<string, number>();
-  let currentStreak = 0;
-  for (let i = 0; i < sortedDates.length; i++) {
-    if (i === 0) { currentStreak = 1; }
-    else {
-      const prev = new Date(sortedDates[i - 1] + 'T00:00:00');
-      const curr = new Date(sortedDates[i] + 'T00:00:00');
-      const diff = Math.round((curr.getTime() - prev.getTime()) / 86400000);
-      currentStreak = diff <= 2 ? currentStreak + 1 : 1;
-    }
-    streakOnDate.set(sortedDates[i], currentStreak);
-  }
+  // Weekly streak for XP bonus (default 6 training days/week)
+  const weeklyStreak = calcWeeklyStreak(sessions, 6);
+  const effectiveStreak = weeklyStreak.streak + (weeklyStreak.currentWeekComplete ? 1 : 0);
 
   const sessionXPs: SessionXP[] = sessions.map((s) => {
     // Tonnage XP
@@ -85,12 +73,11 @@ export function calcXPProfile(entries: LiftEntry[]): XPProfile {
     // PR bonus
     const prXP = allPRs.has(s.date) ? 100 : 0;
 
-    // Streak bonus
-    const streak = streakOnDate.get(s.date) || 0;
+    // Streak bonus (based on consecutive completed weeks)
     let streakXP = 0;
-    if (streak >= 14) streakXP = 30;
-    else if (streak >= 7) streakXP = 20;
-    else if (streak >= 3) streakXP = 10;
+    if (effectiveStreak >= 8) streakXP = 30;
+    else if (effectiveStreak >= 4) streakXP = 20;
+    else if (effectiveStreak >= 2) streakXP = 10;
 
     return { date: s.date, tonnageXP, amrapXP, prXP, streakXP, total: tonnageXP + amrapXP + prXP + streakXP };
   });

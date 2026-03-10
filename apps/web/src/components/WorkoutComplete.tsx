@@ -13,11 +13,12 @@ interface WorkoutCompleteProps {
   onDismiss: () => void;
 }
 
-function getStreakMessage(streak: number): string {
-  if (streak >= 14) return 'Two weeks straight. Machine mode.';
-  if (streak >= 7) return '7+ days in a row. Unstoppable.';
-  if (streak >= 5) return '5 days running. You\'re on fire!';
-  if (streak >= 3) return '3-day streak. Building momentum.';
+function getStreakMessage(sessionsThisWeek: number): string {
+  if (sessionsThisWeek >= 6) return 'Full week complete. Absolute machine.';
+  if (sessionsThisWeek >= 5) return 'One more and you own this week.';
+  if (sessionsThisWeek >= 4) return '4 sessions in. Strong week building.';
+  if (sessionsThisWeek >= 3) return 'Halfway through the week. Keep pushing.';
+  if (sessionsThisWeek >= 2) return 'Momentum building. Stay consistent.';
   return 'Every session counts. Keep showing up.';
 }
 
@@ -231,7 +232,7 @@ export default function WorkoutComplete({
                 marginBottom: '0.35rem',
               }}
             >
-              {streak} day{streak !== 1 ? 's' : ''} streak
+              {streak} session{streak !== 1 ? 's' : ''} this week
             </div>
           )}
           <div

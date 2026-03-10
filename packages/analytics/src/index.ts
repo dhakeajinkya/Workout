@@ -50,5 +50,8 @@ export {
   type PRPrediction,
 } from './trends.js';
 
+// Streak
+export { calcWeeklyStreak, type WeeklyStreak } from './streak.js';
+
 // Dataset
 export { createDataset } from './dataset.js';

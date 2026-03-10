@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { addLift, exportLiftsAsCSV, clearLocalLifts } from '../lib/storage';
 import { normalizeLiftName } from '../lib/scoring';
-import { useLifts, groupByDay } from '../lib/useLifts';
+import { useLifts, groupByDay, calcWeeklyStreak } from '../lib/useLifts';
 import { calcXPProfile } from '../lib/gamification';
 import WorkoutComplete from '../components/WorkoutComplete';
 
@@ -274,19 +274,10 @@ export default function Log() {
       // Calculate XP after (entries won't have updated yet, so simulate)
       const xpAfter = calcXPProfile([...entries, ...completedSets]);
 
-      // Calculate streak (allow 2-day gaps for rest days)
-      const dateSet = new Set(groupByDay(entries).map(s => s.date));
-      dateSet.add(date); // include today's session
-      let streak = 0;
-      let gap = 0;
-      const d = new Date();
-      while (true) {
-        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        if (dateSet.has(key)) { streak++; gap = 0; }
-        else if (streak === 0) { /* skip leading gap */ }
-        else { gap++; if (gap >= 3) break; }
-        d.setDate(d.getDate() - 1);
-      }
+      // Weekly streak for celebration screen
+      const allSessions = groupByDay([...entries, ...completedSets]);
+      const trainingDays = program ? program.filter(d => d.exercises.length > 0).length : 6;
+      const ws = calcWeeklyStreak(allSessions, trainingDays);
 
       setCelebration({
         sets: completedSets.length,
@@ -297,7 +288,7 @@ export default function Log() {
         levelAfter: xpAfter.level,
         progressBefore: xpBefore.progressPct / 100,
         progressAfter: xpAfter.progressPct / 100,
-        streak,
+        streak: ws.currentWeekSessions,
       });
 
       // Reset page state

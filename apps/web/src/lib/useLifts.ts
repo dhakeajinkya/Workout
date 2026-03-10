@@ -22,5 +22,7 @@ export {
   getBestRecentSets,
   getUniqueLifts,
   calcFatigue,
+  calcWeeklyStreak,
   type FatigueData,
+  type WeeklyStreak,
 } from '@ironlogs/analytics';

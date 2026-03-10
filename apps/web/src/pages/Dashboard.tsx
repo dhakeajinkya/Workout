@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import TodaySession from '../components/TodaySession';
 import FatigueBanner from '../components/FatigueBanner';
-import { useLifts, getBestRecentSets, getLatestBodyweight, groupByDay } from '../lib/useLifts';
+import { useLifts, getBestRecentSets, getLatestBodyweight, groupByDay, calcWeeklyStreak } from '../lib/useLifts';
 import { calcLiftScore, calcOverallScore } from '../lib/scoring';
 import { calcReadiness, getAllStrengthVelocities, detectPlateaus, getStrengthRatios } from '../lib/analytics';
 import { calcXPProfile, getLifterClass, getRank } from '../lib/gamification';
@@ -26,10 +26,21 @@ const ratioColors = { balanced: '#66bb6a', lagging: '#ef5350', dominant: '#ffa72
 export default function Dashboard() {
   const { entries, loading } = useLifts();
   const [time, setTime] = useState(getTime());
+  const [trainingDaysPerWeek, setTrainingDaysPerWeek] = useState(6);
 
   useEffect(() => {
     const interval = setInterval(() => setTime(getTime()), 30000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.BASE_URL}data/nsuns-program.json`)
+      .then(r => r.json())
+      .then(data => {
+        const trainingDays = data.days.filter((d: any) => !d.rest).length;
+        setTrainingDaysPerWeek(trainingDays);
+      })
+      .catch(() => {});
   }, []);
 
   if (loading) {
@@ -63,21 +74,7 @@ export default function Dashboard() {
   const lifterClass = getLifterClass(entries);
   const rank = getRank(entries);
 
-  let streak = 0;
-  const today = new Date();
-  const dateSet = new Set(sessions.map(s => s.date));
-  const d = new Date(today);
-  let gap = 0;
-  while (true) {
-    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    if (dateSet.has(key)) { streak++; gap = 0; d.setDate(d.getDate() - 1); }
-    else if (streak === 0) { d.setDate(d.getDate() - 1); }
-    else {
-      gap++;
-      if (gap >= 3) break;
-      d.setDate(d.getDate() - 1);
-    }
-  }
+  const weeklyStreak = calcWeeklyStreak(sessions, trainingDaysPerWeek);
 
   return (
     <div>
@@ -116,8 +113,8 @@ export default function Dashboard() {
         </div>
         <div className="stat-card">
           <div className="label">Streak</div>
-          <div className="value">{streak} <span className="text-lg font-medium text-text-secondary">d</span></div>
-          <div className="sub">consecutive</div>
+          <div className="value">{weeklyStreak.streak} <span className="text-lg font-medium text-text-secondary">w</span></div>
+          <div className="sub">{weeklyStreak.currentWeekSessions}/{weeklyStreak.requiredPerWeek} this week</div>
         </div>
         <div className="stat-card">
           <div className="label">Bodyweight</div>
