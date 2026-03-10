@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { addLift, exportLiftsAsCSV } from '../lib/storage';
+import { addLift, exportLiftsAsCSV, clearLocalLifts } from '../lib/storage';
 import { normalizeLiftName } from '../lib/scoring';
 import { useLifts, groupByDay } from '../lib/useLifts';
 
@@ -427,7 +427,7 @@ export default function Log() {
 
       {/* Status */}
       {status && (
-        <div className={`text-sm p-2 px-3 rounded-md ${
+        <div className={`text-sm p-2 px-3 rounded-md mb-4 ${
           status.includes('Error') || status.includes('No ')
             ? 'text-danger bg-danger/10'
             : 'text-success bg-success/10'
@@ -435,6 +435,23 @@ export default function Log() {
           {status}
         </div>
       )}
+
+      {/* Data management */}
+      <div className="mt-8 pt-4 border-t border-border">
+        <button
+          onClick={async () => {
+            if (confirm('Clear all locally logged sets? This won\'t affect your CSV data.')) {
+              await clearLocalLifts();
+              await refreshLocalLifts();
+              setStatus('Local data cleared');
+              setTimeout(() => setStatus(''), 2000);
+            }
+          }}
+          className="text-xs text-text-muted bg-transparent border-none cursor-pointer underline"
+        >
+          Clear local data
+        </button>
+      </div>
     </div>
   );
 }
