@@ -1,22 +1,32 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
+import ErrorBoundary from './components/ErrorBoundary'
 
-const Dashboard = lazy(() => import('./pages/Dashboard'))
-const Scores = lazy(() => import('./pages/Scores'))
-const Progression = lazy(() => import('./pages/Progression'))
-const Amrap = lazy(() => import('./pages/Amrap'))
-const Tonnage = lazy(() => import('./pages/Tonnage'))
-const Bodyweight = lazy(() => import('./pages/Bodyweight'))
-const Frequency = lazy(() => import('./pages/Frequency'))
-const MuscleMapPage = lazy(() => import('./pages/MuscleMap'))
-const Overall = lazy(() => import('./pages/Overall'))
-const Journal = lazy(() => import('./pages/Journal'))
-const Goals = lazy(() => import('./pages/Goals'))
-const Log = lazy(() => import('./pages/Log'))
-const Achievements = lazy(() => import('./pages/Achievements'))
-const Analytics = lazy(() => import('./pages/Analytics'))
-const Compliance = lazy(() => import('./pages/Compliance'))
+// Retry failed chunk loads once (handles stale SW cache after deploy)
+function lazyRetry(fn: () => Promise<any>) {
+  return lazy(() => fn().catch(() => {
+    // Force reload to get fresh chunks
+    window.location.reload();
+    return fn();
+  }));
+}
+
+const Dashboard = lazyRetry(() => import('./pages/Dashboard'))
+const Scores = lazyRetry(() => import('./pages/Scores'))
+const Progression = lazyRetry(() => import('./pages/Progression'))
+const Amrap = lazyRetry(() => import('./pages/Amrap'))
+const Tonnage = lazyRetry(() => import('./pages/Tonnage'))
+const Bodyweight = lazyRetry(() => import('./pages/Bodyweight'))
+const Frequency = lazyRetry(() => import('./pages/Frequency'))
+const MuscleMapPage = lazyRetry(() => import('./pages/MuscleMap'))
+const Overall = lazyRetry(() => import('./pages/Overall'))
+const Journal = lazyRetry(() => import('./pages/Journal'))
+const Goals = lazyRetry(() => import('./pages/Goals'))
+const Log = lazyRetry(() => import('./pages/Log'))
+const Achievements = lazyRetry(() => import('./pages/Achievements'))
+const Analytics = lazyRetry(() => import('./pages/Analytics'))
+const Compliance = lazyRetry(() => import('./pages/Compliance'))
 
 function PageLoader() {
   return (
@@ -30,6 +40,7 @@ function PageLoader() {
 export default function App() {
   return (
     <Layout>
+      <ErrorBoundary>
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
@@ -49,6 +60,7 @@ export default function App() {
           <Route path="/compliance" element={<Compliance />} />
         </Routes>
       </Suspense>
+      </ErrorBoundary>
     </Layout>
   )
 }

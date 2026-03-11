@@ -164,6 +164,39 @@ function createEmptyExercise(lift: string): WorkoutExercise {
   };
 }
 
+const SESSION_KEY = 'ironlogs-log-session';
+
+interface SavedSession {
+  exercises: WorkoutExercise[];
+  selectedDay: number;
+  date: string;
+  bodyweight: string;
+  sleep: string;
+  workoutStarted: boolean;
+}
+
+function saveSession(data: SavedSession) {
+  try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(data)); } catch {}
+}
+
+function loadSession(): SavedSession | null {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw) as SavedSession;
+    // Only restore if from today
+    if (data.date !== new Date().toISOString().slice(0, 10)) {
+      sessionStorage.removeItem(SESSION_KEY);
+      return null;
+    }
+    return data;
+  } catch { return null; }
+}
+
+function clearSession() {
+  sessionStorage.removeItem(SESSION_KEY);
+}
+
 export default function Log() {
   const { entries, loading, refreshLocalLifts } = useLifts();
   const [program, setProgram] = useState<ProgramDay[] | null>(null);
@@ -176,6 +209,7 @@ export default function Log() {
   const [saving, setSaving] = useState(false);
   const [workoutStarted, setWorkoutStarted] = useState(false);
   const [showAddExercise, setShowAddExercise] = useState(false);
+  const [restoredFromSession, setRestoredFromSession] = useState(false);
   const [celebration, setCelebration] = useState<{
     sets: number; xpGained: number; xpBefore: number; xpAfter: number;
     levelBefore: number; levelAfter: number; progressBefore: number; progressAfter: number; streak: number;
@@ -188,16 +222,34 @@ export default function Log() {
       .catch(() => setProgram(null));
   }, []);
 
+  // Restore saved session or detect next day
   useEffect(() => {
     if (!program || loading) return;
-    setSelectedDay(detectNextDay(entries, program));
+    const saved = loadSession();
+    if (saved && saved.workoutStarted) {
+      setSelectedDay(saved.selectedDay);
+      setExercises(saved.exercises);
+      setBodyweight(saved.bodyweight);
+      setSleep(saved.sleep);
+      setDate(saved.date);
+      setWorkoutStarted(true);
+      setRestoredFromSession(true);
+    } else {
+      setSelectedDay(detectNextDay(entries, program));
+    }
   }, [program, entries, loading]);
 
   useEffect(() => {
-    if (!program) return;
+    if (!program || restoredFromSession) return;
     setExercises(programDayToWorkout(program[selectedDay]));
     setWorkoutStarted(false);
-  }, [program, selectedDay]);
+  }, [program, selectedDay, restoredFromSession]);
+
+  // Persist workout state on every change
+  useEffect(() => {
+    if (!workoutStarted) return;
+    saveSession({ exercises, selectedDay, date, bodyweight, sleep, workoutStarted });
+  }, [exercises, selectedDay, date, bodyweight, sleep, workoutStarted]);
 
   const updateSet = useCallback((exIdx: number, setIdx: number, field: 'weight' | 'reps', value: string) => {
     setExercises(prev => {
@@ -292,6 +344,8 @@ export default function Log() {
       });
 
       // Reset page state
+      clearSession();
+      setRestoredFromSession(false);
       if (program) {
         setExercises(programDayToWorkout(program[selectedDay]));
         setWorkoutStarted(false);
@@ -314,6 +368,8 @@ export default function Log() {
     // Clear IndexedDB after successful export
     await clearLocalLifts();
     await refreshLocalLifts();
+    clearSession();
+    setRestoredFromSession(false);
     setStatus('Exported & local data cleared');
     setTimeout(() => setStatus(''), 3000);
   };
@@ -355,7 +411,7 @@ export default function Log() {
           return (
           <button
             key={i}
-            onClick={() => setSelectedDay(i)}
+            onClick={() => { setRestoredFromSession(false); clearSession(); setSelectedDay(i); }}
             className={`px-2.5 py-1 rounded-md text-xs font-semibold border cursor-pointer transition-colors ${
               i === selectedDay
                 ? 'border-accent bg-accent-glow text-accent'
