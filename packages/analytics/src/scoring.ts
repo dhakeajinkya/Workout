@@ -1,28 +1,33 @@
 import type { StrengthLevel } from '@ironlogs/core';
 
-// --- DOTS Coefficient (Males) ---
-// From the DOTS formula adopted by IPF in 2019 as the replacement for Wilks.
-// Haleczko, A. (2019). The DOTS formula for comparing performances across
-// bodyweights in powerlifting.
-function dotsCoefficient(bw: number): number {
-  const a = -307.75076;
-  const b = 24.990210;
-  const c = -0.1467220;
-  const d = 0.0007405380;
-  const e = -0.0000017452;
+export type Sex = 'male' | 'female';
+
+// --- DOTS Coefficients ---
+// Official IPF DOTS formula adopted in 2019.
+// Source: Haleczko, A. (2019). DOTS = 500 × Total / (a + bW + cW² + dW³ + eW⁴)
+// Verified against: https://www.thecalcs.com/calculators/fitness-lifestyle/dots-calculator
+//                   https://strengthinumbrs.com/dots-calculator/
+const DOTS_COEFFICIENTS = {
+  male:   { a: -307.75076, b: 24.0900756,  c: -0.1918759221, d: 0.0007391293,  e: -0.0000010930 },
+  female: { a: -57.96288,  b: 13.6175032,  c: -0.1126655495, d: 0.0005158568,  e: -0.0000010706 },
+};
+
+function dotsCoefficient(bw: number, sex: Sex = 'male'): number {
+  const { a, b, c, d, e } = DOTS_COEFFICIENTS[sex];
   const denom = a + b * bw + c * bw ** 2 + d * bw ** 3 + e * bw ** 4;
   if (denom <= 0) return 0;
   return 500 / denom;
 }
 
-// --- Wilks Coefficient (Males, legacy) ---
-function wilksCoefficient(bw: number): number {
-  const a = -216.0475144;
-  const b = 16.2606339;
-  const c = -0.002388645;
-  const d = -0.00113732;
-  const e = 0.00000701863;
-  const f = -0.000000001291;
+// --- Wilks Coefficients (legacy) ---
+// Source: https://en.wikipedia.org/wiki/Wilks_coefficient
+const WILKS_COEFFICIENTS = {
+  male:   { a: -216.0475144, b: 16.2606339, c: -0.002388645, d: -0.00113732, e: 0.00000701863, f: -0.000000001291 },
+  female: { a: 594.31747775582, b: -27.23842536447, c: 0.82112226871, d: -0.00930733913, e: 0.00004731582, f: -0.00000009054 },
+};
+
+function wilksCoefficient(bw: number, sex: Sex = 'male'): number {
+  const { a, b, c, d, e, f } = WILKS_COEFFICIENTS[sex];
   const denom = a + b * bw + c * bw ** 2 + d * bw ** 3 + e * bw ** 4 + f * bw ** 5;
   if (denom <= 0) return 0;
   return 500 / denom;
@@ -30,21 +35,79 @@ function wilksCoefficient(bw: number): number {
 
 export type ScoringFormula = 'dots' | 'wilks';
 
-// --- Lift Ratios (% of Powerlifting Total, Males) ---
-export const LIFT_RATIOS: Record<string, number> = {
-  deadlift: 0.3968,
-  squat: 0.3452,
-  bench: 0.2579,
-  sumo_deadlift: 0.3968,
-  front_squat: 0.2762,
-  incline_bench: 0.2115,
-  ohp: 0.1676,
-  push_press: 0.2229,
-  snatch_press: 0.1341,
-  pendlay_row: 0.2103,
-  power_clean: 0.2222,
-  cgbench: 0.2321,
+// --- Formula Scaling ---
+// Maps raw DOTS/Wilks points onto 0-125 level scale.
+// Calibrated at ~83kg male reference BW so both formulas produce equivalent levels.
+const FORMULA_SCALING: Record<ScoringFormula, number> = {
+  dots: 4.3,
+  wilks: 4,
 };
+
+// --- Bodyweight Clamping ---
+// DOTS polynomial is validated for 40-210kg. Outside this range results are unreliable.
+const MIN_BW = 40;
+const MAX_BW = 210;
+function clampBW(bw: number): number {
+  return Math.max(MIN_BW, Math.min(MAX_BW, bw));
+}
+
+/**
+ * Calculate raw DOTS score: 500 × Total / polynomial(bodyweight).
+ * This is the official IPF formula with no additional scaling.
+ * Bodyweight is clamped to the valid range (40-210kg).
+ *
+ * @param bodyweight - Lifter's bodyweight in kg
+ * @param total - Powerlifting total (or estimated total) in kg
+ * @param sex - 'male' or 'female' (default: 'male')
+ * @returns Raw DOTS score (typically 100-600 for competitive lifters)
+ */
+export function calculateDOTS(bodyweight: number, total: number, sex: Sex = 'male'): number {
+  if (bodyweight <= 0 || total <= 0) return 0;
+  return Math.round(total * dotsCoefficient(clampBW(bodyweight), sex) * 10) / 10;
+}
+
+// --- Lift Ratios (% of Powerlifting Total) ---
+// Sex-specific ratios: women bench proportionally more of their total.
+// Male ratios from competitive powerlifting data.
+// Female ratios adjusted per coaching recommendation.
+const LIFT_RATIOS_BY_SEX: Record<Sex, Record<string, number>> = {
+  male: {
+    deadlift: 0.3968,
+    squat: 0.3452,
+    bench: 0.2579,
+    sumo_deadlift: 0.3968,
+    front_squat: 0.2762,
+    incline_bench: 0.2115,
+    ohp: 0.1676,
+    push_press: 0.2229,
+    snatch_press: 0.1341,
+    pendlay_row: 0.2103,
+    power_clean: 0.2222,
+    cgbench: 0.2321,
+  },
+  female: {
+    deadlift: 0.3750,
+    squat: 0.3500,
+    bench: 0.2800,
+    sumo_deadlift: 0.3750,
+    front_squat: 0.2800,
+    incline_bench: 0.2300,
+    ohp: 0.1800,
+    push_press: 0.2400,
+    snatch_press: 0.1450,
+    pendlay_row: 0.2200,
+    power_clean: 0.2350,
+    cgbench: 0.2520,
+  },
+};
+
+/** Default male ratios — backwards-compatible export for existing consumers. */
+export const LIFT_RATIOS: Record<string, number> = LIFT_RATIOS_BY_SEX.male;
+
+/** Get sex-specific lift ratio. Returns undefined if lift is not in the ratio table. */
+export function getLiftRatio(lift: string, sex: Sex = 'male'): number | undefined {
+  return LIFT_RATIOS_BY_SEX[sex][lift];
+}
 
 // --- Age Adjustment ---
 function ageAdjustment(age: number): number {
@@ -59,21 +122,21 @@ function ageAdjustment(age: number): number {
  * Pipeline: 1RM → estimated PL total (via lift ratio) → bodyweight-normalized
  * points (DOTS or Wilks) → age-adjusted → scaled to 0-125 range.
  *
- * The /4 scaling maps raw DOTS/Wilks points (typically 200-500 for competitive
- * lifters) onto the 0-125 level scale: 500 DOTS → 125 = World Class.
+ * The divisor maps raw DOTS/Wilks points (typically 200-500 for competitive
+ * lifters) onto the 0-125 level scale. Calibrated so that Wilks and DOTS
+ * produce equivalent classifications at ~83kg reference bodyweight.
+ * DOTS divisor 4.3 = dotsCoeff(83) / (wilksCoeff(83) / 4).
  */
 function singleLiftScore(
   bw: number, liftName: string, oneRepMax: number,
-  age: number = 30, formula: ScoringFormula = 'dots',
+  age: number = 30, formula: ScoringFormula = 'dots', sex: Sex = 'male',
 ): number {
-  const ratio = LIFT_RATIOS[liftName];
+  const ratio = getLiftRatio(liftName, sex);
   if (!ratio || bw <= 0 || oneRepMax <= 0) return 0;
   const expectedPLTotal = oneRepMax / ratio;
-  const coeff = formula === 'dots' ? dotsCoefficient(bw) : wilksCoefficient(bw);
+  const coeff = formula === 'dots' ? dotsCoefficient(clampBW(bw), sex) : wilksCoefficient(clampBW(bw), sex);
   const points = expectedPLTotal * coeff;
-  // Scale to 0-125 range using formula-specific divisor
-  const divisor = formula === 'dots' ? 2.9 : 4;
-  return (points * ageAdjustment(age)) / divisor;
+  return (points * ageAdjustment(age)) / FORMULA_SCALING[formula];
 }
 
 // --- Level Thresholds (calibrated at ~83kg reference bodyweight) ---
@@ -140,11 +203,12 @@ export function calcLiftScore(
   bodyweight: number,
   age: number = 30,
   formula: ScoringFormula = 'dots',
+  sex: Sex = 'male',
 ): { score: number; level: StrengthLevel; color: string; estimated1RM: number } {
-  if (bodyweight <= 0 || oneRepMax <= 0 || !LIFT_RATIOS[lift]) {
+  if (bodyweight <= 0 || oneRepMax <= 0 || !getLiftRatio(lift, sex)) {
     return { score: 0, level: 'Subpar', color: LEVEL_COLORS['Subpar'], estimated1RM: oneRepMax };
   }
-  const score = Math.round(singleLiftScore(bodyweight, lift, oneRepMax, age, formula) * 10) / 10;
+  const score = Math.round(singleLiftScore(bodyweight, lift, oneRepMax, age, formula, sex) * 10) / 10;
   const { level, color } = getLevel(score);
   return { score, level, color, estimated1RM: oneRepMax };
 }

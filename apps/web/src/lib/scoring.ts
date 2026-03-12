@@ -3,6 +3,7 @@ export {
   estimate1RM,
   calcLiftScore,
   calcOverallScore,
+  calculateDOTS,
   calcMuscleScores,
   calcSymmetryScore,
   LIFT_RATIOS,
@@ -11,6 +12,7 @@ export {
   LEVEL_COLORS,
   SCORING_CATEGORIES,
   LIFT_MUSCLE_MAP,
+  type Sex,
 } from '@ironlogs/analytics';
 
 // normalizeLiftName lives in csv-parser

@@ -68,7 +68,7 @@ function classifyACWR(acwr: number): { status: FatigueData['status']; label: str
  * 28-day chronic window, as described in Williams et al. (2016). Requires at
  * least 21 days of data for meaningful chronic load estimation.
  *
- * ACWR zones: <0.8 detraining, 0.8-1.3 sweet spot, 1.3-1.5 moderate, >1.5 high.
+ * ACWR zones: <0.8 detraining, 0.8-1.2 optimal, 1.2-1.4 elevated fatigue, >1.4 deload recommended.
  *
  * @param entries - All lift entries
  * @returns Fatigue data with ACWR, EWMA values, and status classification, or null if insufficient data

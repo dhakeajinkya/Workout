@@ -60,6 +60,7 @@ function ReadinessCard({ readiness }: { readiness: ReadinessScore }) {
   return (
     <div className="card mb-6">
       <h3 className="mb-4">Readiness Score</h3>
+      <p className="text-xs opacity-60 mb-3">How prepared your body is for training today. Combines sleep quality (50%), fatigue levels (30%), and recent AMRAP performance (20%).</p>
       <div className="flex flex-col items-center gap-4">
         <svg width={140} height={140} viewBox="0 0 140 140">
           <circle cx={70} cy={70} r={radius} fill="none" stroke="rgba(128,128,128,0.15)" strokeWidth={10} />
@@ -103,6 +104,7 @@ function IntensityDistributionChart({ buckets }: { buckets: IntensityBucket[] })
   return (
     <div className="card mb-6">
       <h3 className="mb-4">Relative Intensity Distribution</h3>
+      <p className="text-xs opacity-60 mb-3">How your sets distribute across effort levels. Aim for most work in the 70-85% zone with strategic heavy and light days.</p>
       <div className="overflow-x-auto">
         <svg width={totalWidth} height={buckets.length * (barHeight + 8) + 10} style={{ fontSize: '12px' }}>
           {buckets.map((b, i) => {
@@ -160,6 +162,7 @@ function StimulusTimeline({ data }: { data: SessionStimulus[] }) {
   return (
     <div className="card mb-6">
       <h3 className="mb-4">Stimulus Score Timeline</h3>
+      <p className="text-xs opacity-60 mb-3">Training stimulus combines volume and intensity into a single score. Higher isn't always better — look for consistent, sustainable stimulus over time.</p>
       <Line
         data={chartData}
         options={{
@@ -197,6 +200,7 @@ function LiftFatigueCards({ fatigueData }: { fatigueData: LiftFatigue[] }) {
   return (
     <div className="card mb-6">
       <h3 className="mb-4">Lift-Specific Fatigue</h3>
+      <p className="text-xs opacity-60 mb-3">Acute-to-Chronic Workload Ratio (ACWR) per lift. Values 0.8-1.2 are optimal. Above 1.4 signals overreach — consider a deload.</p>
       <div className="flex gap-3 flex-wrap justify-center">
         {fatigueData.map((f) => (
           <div
@@ -232,6 +236,7 @@ function StrengthVelocityCards({ velocities }: { velocities: StrengthVelocity[] 
   return (
     <div className="card mb-6">
       <h3 className="mb-4">Strength Velocity</h3>
+      <p className="text-xs opacity-60 mb-3">Rate of 1RM change over the last 8 weeks. Positive = gaining strength, zero = plateau, negative = losing strength.</p>
       <div className="flex gap-3 flex-wrap justify-center">
         {velocities.map((v) => (
           <div key={v.lift} className="stat-card" style={{ minWidth: '160px' }}>
@@ -301,6 +306,7 @@ function StrengthBalanceTable({ ratios }: { ratios: StrengthRatio[] }) {
   return (
     <div className="card mb-6">
       <h3 className="mb-4">Strength Balance</h3>
+      <p className="text-xs opacity-60 mb-3">How your lift ratios compare to competitive powerlifting norms. 'Lagging' means a lift is underdeveloped relative to your others.</p>
       <div className="flex flex-wrap gap-2 justify-center">
         {ratios.map((r) => (
           <div key={r.name} className="rounded-lg p-3 border border-border text-center" style={{ minWidth: '140px', flex: '1 1 140px', maxWidth: '180px' }}>
@@ -347,6 +353,7 @@ function WeeklyMuscleVolumeChart({ volumes }: { volumes: WeeklyMuscleVolume[] })
   return (
     <div className="card mb-6">
       <h3 className="mb-4">Weekly Muscle Volume</h3>
+      <p className="text-xs opacity-60 mb-3">Volume distribution across muscle groups from the past 7 days. Helps identify underworked areas in your program.</p>
       <div className="overflow-x-auto">
         <svg width={totalWidth} height={totalHeight} style={{ fontSize: '11px' }}>
           {top15.map((v, i) => {
@@ -376,6 +383,7 @@ function FatigueReserveCard({ reserve }: { reserve: FatigueReserve }) {
   return (
     <div className="card mb-6">
       <h3 className="mb-4">Fatigue Reserve</h3>
+      <p className="text-xs opacity-60 mb-3">How much room you have to increase training load before reaching your chronic baseline. Negative = you're exceeding your body's adapted capacity.</p>
       <div
         className="stat-card"
         style={{ borderLeft: `4px solid ${reserve.color}`, display: 'inline-block' }}
@@ -412,6 +420,7 @@ function AmrapTrendCards({ trends }: { trends: AmrapTrend[] }) {
   return (
     <div className="card mb-6">
       <h3 className="mb-4">AMRAP Trends</h3>
+      <p className="text-xs opacity-60 mb-3">Rolling 7-day vs 21-day AMRAP rep average. When the short-term average exceeds the long-term, you're likely peaking.</p>
       <div className="flex gap-3 flex-wrap justify-center">
         {trends.map((t) => (
           <div key={t.lift} className="stat-card" style={{ minWidth: '160px' }}>
@@ -445,6 +454,7 @@ function ComplianceCards({ summary }: { summary: ComplianceSummary }) {
   return (
     <div className="card mb-6">
       <h3 className="mb-4">nSuns Compliance</h3>
+      <p className="text-xs opacity-60 mb-3">How closely you follow the nSuns program. T1 = primary compound, T2 = secondary. AMRAP effort = bonus reps on the '1+' set.</p>
       <div className="flex gap-3 flex-wrap justify-center">
         <div className="stat-card">
           <div className="label">Avg T1 Rate</div>

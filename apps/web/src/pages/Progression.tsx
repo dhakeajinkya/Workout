@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Chart as ChartJS, LinearScale, PointElement, LineElement, TimeScale, Title, Tooltip, Legend, Filler } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { Line } from 'react-chartjs-2';
@@ -78,20 +78,37 @@ export default function Progression() {
         },
       }} />
       {progression.length > 0 && (
-        <div className="mt-4">
-          <h4>Session Log</h4>
-          <table>
-            <thead><tr><th>Date</th><th>Best Set</th><th>Est. 1RM</th><th>PR</th></tr></thead>
-            <tbody>{progression.map((p) => (
-              <tr key={p.date}>
-                <td>{p.date}</td>
-                <td>{p.weight}kg x {p.reps}</td>
-                <td>{p.estimated1RM.toFixed(1)}kg</td>
-                <td>{prs.has(p.date) ? 'PR' : ''}</td>
-              </tr>
-            ))}</tbody>
-          </table>
-        </div>
+        <ProgressionTable progression={progression} prs={prs} />
+      )}
+    </div>
+  );
+}
+
+const PAGE_SIZE = 30;
+
+function ProgressionTable({ progression, prs }: { progression: { date: string; weight: number; reps: number; estimated1RM: number }[]; prs: Set<string> }) {
+  const reversed = useMemo(() => [...progression].reverse(), [progression]);
+  const [showAll, setShowAll] = useState(false);
+  const visible = showAll ? reversed : reversed.slice(0, PAGE_SIZE);
+
+  return (
+    <div className="mt-4">
+      <h4>Session Log</h4>
+      <table>
+        <thead><tr><th>Date</th><th>Best Set</th><th>Est. 1RM</th><th>PR</th></tr></thead>
+        <tbody>{visible.map((p) => (
+          <tr key={p.date}>
+            <td>{p.date}</td>
+            <td>{p.weight}kg x {p.reps}</td>
+            <td>{p.estimated1RM.toFixed(1)}kg</td>
+            <td>{prs.has(p.date) ? 'PR' : ''}</td>
+          </tr>
+        ))}</tbody>
+      </table>
+      {!showAll && reversed.length > PAGE_SIZE && (
+        <button className="mt-2 text-sm opacity-60 hover:opacity-100" onClick={() => setShowAll(true)}>
+          Show all {reversed.length} entries
+        </button>
       )}
     </div>
   );

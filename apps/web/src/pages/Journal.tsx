@@ -152,17 +152,26 @@ function SessionCard({ session }: { session: ReturnType<typeof groupByDay>[0] })
   );
 }
 
+const JOURNAL_PAGE_SIZE = 40;
+
 export default function Journal() {
   const { entries, loading } = useLifts();
+  const [visibleCount, setVisibleCount] = useState(JOURNAL_PAGE_SIZE);
   if (loading) return <p className="text-text-muted">Loading...</p>;
   const sessions = groupByDay(entries).reverse();
+  const visible = sessions.slice(0, visibleCount);
 
   return (
     <div>
       <h2>Session Journal</h2>
       <div className="flex flex-col gap-3">
-        {sessions.map((session) => <SessionCard key={session.date} session={session} />)}
+        {visible.map((session) => <SessionCard key={session.date} session={session} />)}
       </div>
+      {visibleCount < sessions.length && (
+        <button className="mt-4 w-full text-sm py-2 opacity-60 hover:opacity-100" onClick={() => setVisibleCount((c) => c + JOURNAL_PAGE_SIZE)}>
+          Load more ({sessions.length - visibleCount} remaining)
+        </button>
+      )}
     </div>
   );
 }

@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
 import { useLifts, groupByDay, get1RMProgression, getLatestBodyweight } from '../lib/useLifts';
 import { estimate1RM, normalizeLiftName, calcLiftScore } from '../lib/scoring';
 import { calcLiftFatigue } from '../lib/analytics';
 import { LIFT_LABELS, LIFT_COLORS } from '../lib/liftMeta';
+import { useProgramData } from '../lib/useProgramData';
 
 interface ProgramSet { weight: number; reps: string | number; }
 interface ProgramLift { lift: string; sets: ProgramSet[]; }
@@ -25,13 +25,11 @@ function SetPill({ set, liftColor }: { set: ProgramSet; liftColor: string }) {
 
 export default function TodaySession() {
   const { entries, loading } = useLifts();
-  const [program, setProgram] = useState<{ days: ProgramDay[] } | null>(null);
+  const { days, loading: programLoading } = useProgramData();
 
-  useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/nsuns-program.json`).then((r) => r.json()).then(setProgram);
-  }, []);
+  if (loading || programLoading || days.length === 0) return <p className="text-text-muted">Loading...</p>;
 
-  if (loading || !program) return <p className="text-text-muted">Loading...</p>;
+  const program = { days: days as ProgramDay[] };
 
   const sessions = groupByDay(entries);
   if (sessions.length === 0) return <p>No session data yet.</p>;

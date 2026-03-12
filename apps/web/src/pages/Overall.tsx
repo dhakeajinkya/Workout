@@ -2,17 +2,11 @@ import { Chart as ChartJS, LinearScale, PointElement, LineElement, TimeScale, Ti
 import 'chartjs-adapter-date-fns';
 import { Line } from 'react-chartjs-2';
 import { useLifts, get1RMProgression, getLatestBodyweight, getBodyweightProgression } from '../lib/useLifts';
-import { calcLiftScore, calcOverallScore } from '../lib/scoring';
+import { calcLiftScore, calcOverallScore, calculateDOTS } from '../lib/scoring';
 
 ChartJS.register(LinearScale, TimeScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const SCORED_LIFTS = ['squat', 'bench', 'deadlift', 'ohp'];
-
-function dotsCoefficient(bw: number): number {
-  const a = -0.0000010930, b = 0.0007391293, c = -0.1918759221, d = 24.0900756, e = -307.75076;
-  const denom = a * bw ** 4 + b * bw ** 3 + c * bw ** 2 + d * bw + e;
-  return denom <= 0 ? 0 : 500 / denom;
-}
 
 export default function Overall() {
   const { entries, loading } = useLifts();
@@ -41,7 +35,7 @@ export default function Overall() {
     const liftScores = SCORED_LIFTS.filter((lift) => runningBest[lift]).map((lift) => ({ lift, ...calcLiftScore(lift, runningBest[lift], bw) }));
     if (liftScores.length > 0) ssScoreData.push({ x: date, y: calcOverallScore(liftScores).score });
     const total = SCORED_LIFTS.reduce((sum, lift) => sum + (runningBest[lift] || 0), 0);
-    if (total > 0) dotsData.push({ x: date, y: Math.round(total * dotsCoefficient(bw) * 10) / 10 });
+    if (total > 0) dotsData.push({ x: date, y: calculateDOTS(bw, total) });
   }
 
   const latestSS = ssScoreData.length > 0 ? ssScoreData[ssScoreData.length - 1].y : 0;
@@ -51,13 +45,15 @@ export default function Overall() {
   return (
     <div>
       <h2>Overall Progress</h2>
+      <p className="text-sm opacity-60 mb-4">Your composite strength trajectory over time. SS Score normalizes for bodyweight and averages across lifts. DOTS is the official IPF coefficient used in competition.</p>
       <div className="flex gap-3 mb-6 flex-wrap justify-center">
-        <div className="stat-card"><div className="label">SS Score</div><div className="value">{latestSS}</div><div className="sub">Symmetric Strength</div></div>
-        <div className="stat-card"><div className="label">DOTS</div><div className="value">{latestDOTS}</div><div className="sub">Powerlifting coefficient</div></div>
-        <div className="stat-card"><div className="label">Total</div><div className="value">{total}kg</div><div className="sub">SBD + OHP</div></div>
+        <div className="stat-card"><div className="label">SS Score</div><div className="value">{latestSS}</div><div className="sub">Bodyweight-normalized strength</div></div>
+        <div className="stat-card"><div className="label">DOTS</div><div className="value">{latestDOTS}</div><div className="sub">IPF powerlifting coefficient</div></div>
+        <div className="stat-card"><div className="label">Total</div><div className="value">{total}kg</div><div className="sub">SBD + OHP estimated 1RMs</div></div>
       </div>
 
       <h4>Strength Score Over Time</h4>
+      <p className="text-xs opacity-60 mb-2">Tracks your best-ever 1RMs across SBD + OHP, normalized for bodyweight changes.</p>
       <Line data={{ datasets: [{ label: 'SS Score', data: ssScoreData, borderColor: '#7986cb', backgroundColor: 'rgba(121,134,203,0.1)', fill: true, tension: 0.3, pointRadius: 4 }] }}
         options={{ responsive: true, plugins: { legend: { display: false } }, scales: {
           x: { type: 'time', time: { unit: 'day', tooltipFormat: 'yyyy-MM-dd' } },
@@ -65,6 +61,7 @@ export default function Overall() {
         } }} />
 
       <h4 className="mt-8">DOTS Score Over Time</h4>
+      <p className="text-xs opacity-60 mb-2">Official IPF formula: higher = stronger relative to bodyweight. Competitive lifters typically score 300-500+.</p>
       <Line data={{ datasets: [{ label: 'DOTS', data: dotsData, borderColor: '#81c784', backgroundColor: 'rgba(129,199,132,0.1)', fill: true, tension: 0.3, pointRadius: 4 }] }}
         options={{ responsive: true, plugins: { legend: { display: false } }, scales: {
           x: { type: 'time', time: { unit: 'day', tooltipFormat: 'yyyy-MM-dd' } },

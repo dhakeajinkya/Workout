@@ -11,7 +11,8 @@ function dateDiffDays(a: string, b: string): number {
 }
 
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 function daysAgo(n: number): string {
@@ -325,7 +326,7 @@ export function getStrengthRatios(entries: LiftEntry[]): StrengthRatio[] {
     { name: 'OHP / Bench', num: 'ohp', den: 'bench', target: 0.65 },
   ];
   return ratios
-    .filter((r) => best[r.num] && best[r.den])
+    .filter((r) => best[r.num] && best[r.den] && best[r.num].estimated1RM > 0 && best[r.den].estimated1RM > 0)
     .map((r) => {
       const actual = Math.round((best[r.num].estimated1RM / best[r.den].estimated1RM) * 100) / 100;
       const deviation = Math.round(((actual - r.target) / r.target) * 100);

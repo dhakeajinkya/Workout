@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from 'react';
 import type { LiftEntry } from '@ironlogs/core';
 import { parseCSV } from '@ironlogs/csv-parser';
 import { getLocalLifts } from './storage';
@@ -31,7 +31,8 @@ export function LiftsProvider({ children }: { children: ReactNode }) {
     Promise.all([
       fetch(`${import.meta.env.BASE_URL}data/lifts.csv`)
         .then((r) => r.text())
-        .then((text) => parseCSV(text).entries),
+        .then((text) => parseCSV(text).entries)
+        .catch(() => [] as LiftEntry[]),
       getLocalLifts().catch(() => [] as LiftEntry[]),
     ]).then(([csv, local]) => {
       setCsvEntries(csv);
@@ -52,7 +53,7 @@ export function LiftsProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // Merge CSV + local, deduplicate by date+lift+weight+reps, sort by date
-  const entries = mergeEntries(csvEntries, localEntries);
+  const entries = useMemo(() => mergeEntries(csvEntries, localEntries), [csvEntries, localEntries]);
 
   return (
     <LiftsContext.Provider value={{ entries, loading, isDemo, loadCSV, refreshLocalLifts }}>

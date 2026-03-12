@@ -18,7 +18,10 @@ export interface Quest {
 }
 
 export function getDailyQuests(entries: LiftEntry[]): Quest[] {
-  const today = new Date().toISOString().slice(0, 10);
+  // Use local date, not UTC — toISOString() would shift the date forward for
+  // users in negative-UTC timezones (e.g. 8 PM PST becomes next day in UTC).
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const sessions = groupByDay(entries);
   const todaySession = sessions.find((s) => s.date === today);
 
@@ -50,8 +53,8 @@ export function getWeeklyQuests(entries: LiftEntry[]): Quest[] {
   const monday = new Date(now);
   const day = monday.getDay();
   monday.setDate(monday.getDate() - (day === 0 ? 6 : day - 1));
-  const weekStart = monday.toISOString().slice(0, 10);
-  const weekEnd = new Date().toISOString().slice(0, 10);
+  const weekStart = `${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, '0')}-${String(monday.getDate()).padStart(2, '0')}`;
+  const weekEnd = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
   const sessions = groupByDay(entries);
   const weekSessions = sessions.filter((s) => s.date >= weekStart && s.date <= weekEnd);

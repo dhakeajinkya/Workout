@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   Chart as ChartJS, CategoryScale, LinearScale, BarElement, RadialLinearScale,
   PointElement, LineElement, Filler, Title, Tooltip, Legend,
@@ -21,15 +22,22 @@ export default function Scores() {
   const { entries, loading } = useLifts();
   if (loading) return <p className="text-text-muted">Loading data...</p>;
 
-  const bodyweight = getLatestBodyweight(entries);
-  const bestSets = getBestRecentSets(entries);
-  const liftScores = SCORED_LIFTS.filter((lift) => bestSets[lift]).map((lift) => {
-    const best = bestSets[lift];
-    return { lift, ...best, ...calcLiftScore(lift, best.estimated1RM, bodyweight) };
-  });
-  const overall = calcOverallScore(liftScores);
-  const avgScore = overall.score;
-  const deviations = liftScores.map((s) => avgScore > 0 ? Math.round(((s.score - avgScore) / avgScore) * 100) : 0);
+  const { bodyweight, liftScores, overall, deviations } = useMemo(() => {
+    const bw = getLatestBodyweight(entries);
+    const bestSets = getBestRecentSets(entries);
+    const scores = SCORED_LIFTS.filter((lift) => bestSets[lift]).map((lift) => {
+      const best = bestSets[lift];
+      return { lift, ...best, ...calcLiftScore(lift, best.estimated1RM, bw) };
+    });
+    const ov = calcOverallScore(scores);
+    const avg = ov.score;
+    return {
+      bodyweight: bw,
+      liftScores: scores,
+      overall: ov,
+      deviations: scores.map((s) => avg > 0 ? Math.round(((s.score - avg) / avg) * 100) : 0),
+    };
+  }, [entries]);
 
   const barData = {
     labels: liftScores.map((s) => LIFT_DISPLAY[s.lift] || s.lift),
@@ -79,10 +87,10 @@ export default function Scores() {
         ))}
       </div>
 
-      <div className="mb-6 text-xs opacity-50">BW {bodyweight}kg · DOTS scoring · Wathan 1RM</div>
+      <div className="mb-6 text-xs opacity-50">BW {bodyweight}kg · Scores normalized for bodyweight using DOTS (IPF standard) · 1RM estimated via Wathan formula</div>
 
       <h4>Strength Profile</h4>
-      <p className="text-sm opacity-75 mt-0">Balance across the 5 strength categories</p>
+      <p className="text-sm opacity-75 mt-0">Balance across 5 movement patterns: Squat, Floor Pull, Horizontal Press, Vertical Press, and Pull/Row. Best score per category.</p>
       <div className="max-w-[400px] mx-auto mb-8">
         <Radar data={radarData} options={{
           responsive: true,
@@ -97,7 +105,7 @@ export default function Scores() {
       </div>
 
       <h4>Relative Strengths & Weaknesses</h4>
-      <p className="text-sm opacity-75 mt-0">How each lift compares to your average</p>
+      <p className="text-sm opacity-75 mt-0">How each lift compares to your average. Positive = stronger than average, negative = weaker.</p>
       <Bar data={barData} options={{
         responsive: true, indexAxis: 'y',
         plugins: { legend: { display: false }, tooltip: { callbacks: {

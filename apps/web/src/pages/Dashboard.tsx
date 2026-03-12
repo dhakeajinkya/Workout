@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TodaySession from '../components/TodaySession';
 import FatigueBanner from '../components/FatigueBanner';
@@ -7,6 +7,8 @@ import BarbellLoader from '../components/BarbellLoader';
 import SpeechBubble from '../components/SpeechBubble';
 import { getSpeechLines } from '../lib/speechLines';
 import { useSpeech } from '../lib/useSpeech';
+import { useClockTime } from '../lib/useClockTime';
+import { useProgramData } from '../lib/useProgramData';
 import { useLifts, getBestRecentSets, getLatestBodyweight, groupByDay, calcWeeklyStreak } from '../lib/useLifts';
 import { calcLiftScore, calcOverallScore } from '../lib/scoring';
 import { calcReadiness } from '../lib/analytics';
@@ -22,47 +24,32 @@ function getGreeting(): string {
   return 'Late night';
 }
 
-function getTime(): string {
-  return new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-}
-
 export default function Dashboard() {
   const { entries, loading } = useLifts();
-  const [time, setTime] = useState(getTime());
-  const [trainingDaysPerWeek, setTrainingDaysPerWeek] = useState(6);
-
-  useEffect(() => {
-    const interval = setInterval(() => setTime(getTime()), 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/nsuns-program.json`)
-      .then(r => r.json())
-      .then(data => {
-        const trainingDays = data.days.filter((d: any) => !d.rest).length;
-        setTrainingDaysPerWeek(trainingDays);
-      })
-      .catch(() => {});
-  }, []);
+  const time = useClockTime();
+  const { trainingDaysPerWeek } = useProgramData();
 
   if (loading) return <BarbellLoader size={56} />;
 
-  const bw = getLatestBodyweight(entries);
-  const best = getBestRecentSets(entries);
-  const scored = ['squat', 'bench', 'deadlift', 'ohp'];
-  const liftScores = scored
-    .filter((l) => best[l])
-    .map((l) => ({ lift: l, ...calcLiftScore(l, best[l].estimated1RM, bw) }));
-  const overall = calcOverallScore(liftScores);
-  const sessions = groupByDay(entries);
-
-  const readiness = calcReadiness(entries);
-  const xp = calcXPProfile(entries, { trainingDaysPerWeek });
-  const lifterClass = getLifterClass(entries);
-  const rank = getRank(entries);
-  const title = getTitle(entries);
-  const skills = calcSkillProfile(entries);
+  const { bw, overall, sessions, readiness, xp, lifterClass, rank, title, skills } = useMemo(() => {
+    const bodyweight = getLatestBodyweight(entries);
+    const best = getBestRecentSets(entries);
+    const scored = ['squat', 'bench', 'deadlift', 'ohp'];
+    const ls = scored
+      .filter((l) => best[l])
+      .map((l) => ({ lift: l, ...calcLiftScore(l, best[l].estimated1RM, bodyweight) }));
+    return {
+      bw: bodyweight,
+      overall: calcOverallScore(ls),
+      sessions: groupByDay(entries),
+      readiness: calcReadiness(entries),
+      xp: calcXPProfile(entries, { trainingDaysPerWeek }),
+      lifterClass: getLifterClass(entries),
+      rank: getRank(entries),
+      title: getTitle(entries),
+      skills: calcSkillProfile(entries),
+    };
+  }, [entries, trainingDaysPerWeek]);
 
   // Current streak for status face
   const lastSession = xp.sessions[xp.sessions.length - 1];

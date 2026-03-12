@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useLifts } from '../lib/useLifts';
 import { ACHIEVEMENTS, checkAchievements, CATEGORY_INFO, type AchievementCategory } from '../lib/achievements';
 import type { Achievement } from '../lib/achievements';
 import { calcXPProfile, getLifterClass, getTitle, getRank, RANKS, getBosses, getDailyQuests, getWeeklyQuests, getSeasons, getInsights } from '../lib/gamification';
 import { groupByDay, getBestRecentSets } from '@ironlogs/analytics';
+import { useLifetimeStats } from '../lib/useLifetimeStats';
 import type { LiftEntry } from '@ironlogs/core';
 
 const CATEGORIES: AchievementCategory[] = ['strength', 'consistency', 'endurance', 'program', 'legendary', 'secret'];
@@ -96,43 +97,7 @@ function ProfileTab({ xp, lifterClass, title, rank, insights, earnedCount, total
   // Recent unlocks (max 3)
   const recentUnlocks = earned.slice(-3).reverse();
 
-  // Lifetime stats
-  const lifetime = useMemo(() => {
-    const sessions = groupByDay(entries);
-    const totalTonnage = sessions.reduce((sum, s) => sum + s.tonnage, 0);
-
-    // Calculate current streak (consecutive days with sessions, allowing 1 rest day gaps)
-    let currentStreak = 0;
-    let bestStreak = 0;
-    if (sessions.length > 0) {
-      const dates = sessions.map((s) => s.date).sort().reverse();
-      currentStreak = 1;
-      for (let i = 1; i < dates.length; i++) {
-        const prev = new Date(dates[i - 1] + 'T00:00:00');
-        const curr = new Date(dates[i] + 'T00:00:00');
-        const gap = (prev.getTime() - curr.getTime()) / 86400000;
-        if (gap <= 2) { currentStreak++; } else { break; }
-      }
-      // Best streak
-      let streak = 1;
-      const sortedDates = [...dates].reverse();
-      for (let i = 1; i < sortedDates.length; i++) {
-        const prev = new Date(sortedDates[i - 1] + 'T00:00:00');
-        const curr = new Date(sortedDates[i] + 'T00:00:00');
-        const gap = (curr.getTime() - prev.getTime()) / 86400000;
-        if (gap <= 2) { streak++; } else { streak = 1; }
-        if (streak > bestStreak) bestStreak = streak;
-      }
-      if (currentStreak > bestStreak) bestStreak = currentStreak;
-    }
-
-    return {
-      sessionCount: sessions.length,
-      totalTonnage: Math.round(totalTonnage / 1000 * 10) / 10,
-      currentStreak,
-      bestStreak,
-    };
-  }, [entries]);
+  const lifetime = useLifetimeStats(entries);
 
   return (
     <div className="profile-sections">
@@ -173,13 +138,13 @@ function ProfileTab({ xp, lifterClass, title, rank, insights, earnedCount, total
           <div className="stat-card-icon" style={{ color: title.color }}>&#9733;</div>
           <div className="label">Title</div>
           <div className="value text-base" style={{ color: title.color }}>{title.name}</div>
-          <div className="sub">reputation</div>
+          <div className="sub">Based on total session count</div>
         </div>
         <div className="stat-card">
           <div className="stat-card-icon" style={{ color: rank.color }}>&#9670;</div>
           <div className="label">Rank</div>
           <div className="value text-base" style={{ color: rank.color }}>{rank.name}</div>
-          <div className="sub">score &ge; {rank.minScore}</div>
+          <div className="sub">Overall strength score &ge; {rank.minScore}</div>
         </div>
         <div className="stat-card">
           <div className="stat-card-icon" style={{ color: '#ffd54f' }}>&#127942;</div>
@@ -381,6 +346,7 @@ function QuestsTab({ daily, weekly }: {
   return (
     <div className="profile-sections">
       <div>
+        <p className="text-sm opacity-60 mb-2">Complete these today to earn bonus XP.</p>
         <h4 className="section-header">Daily Quests</h4>
         <div className="flex flex-col gap-2">
           {daily.map((q) => (
@@ -390,6 +356,7 @@ function QuestsTab({ daily, weekly }: {
       </div>
 
       <div>
+        <p className="text-sm opacity-60 mb-2">Longer-term goals that reset each Monday.</p>
         <h4 className="section-header">Weekly Quests</h4>
         <div className="flex flex-col gap-2">
           {weekly.map((q) => (
@@ -427,6 +394,7 @@ function BossesTab({ bosses }: { bosses: ReturnType<typeof getBosses> }) {
   const defeated = bosses.filter((b) => b.defeated).length;
   return (
     <div>
+      <p className="text-sm opacity-60 mb-4">Boss battles are major strength milestones. Defeat them by hitting the target 1RM or total.</p>
       <div className="mb-4 text-sm opacity-75">
         Defeated: <strong>{defeated}/{bosses.length}</strong>
       </div>
@@ -464,6 +432,7 @@ function BossesTab({ bosses }: { bosses: ReturnType<typeof getBosses> }) {
 function AchievementsTab({ earnedIds }: { earnedIds: Set<string> }) {
   return (
     <div className="profile-sections">
+      <p className="text-sm opacity-60 mb-4">Achievements unlock automatically as you train. Secret achievements are revealed when earned.</p>
       {CATEGORIES.map((cat) => {
         const catAchievements = ACHIEVEMENTS.filter((a) => a.category === cat);
         const catEarned = catAchievements.filter((a) => earnedIds.has(a.id)).length;
@@ -520,6 +489,7 @@ function SeasonsTab({ seasons }: { seasons: ReturnType<typeof getSeasons> }) {
 
   return (
     <div>
+      <p className="text-sm opacity-60 mb-4">Seasons are 12-week training cycles starting from your first session. Track your progress across sessions, PRs, and XP each season.</p>
       <div className="flex flex-col gap-3">
         {[...seasons].reverse().map((s) => (
           <div key={s.number} className="p-4 rounded-lg border"

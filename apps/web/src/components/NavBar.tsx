@@ -3,25 +3,33 @@ import { Link, useLocation } from 'react-router-dom'
 
 const PRIMARY_LINKS = [
   { to: '/', label: 'Dashboard' },
+  { to: '/scores', label: 'Scores' },
   { to: '/progression', label: 'Progress' },
   { to: '/analytics', label: 'Analytics' },
-  { to: '/journal', label: 'Journal' },
+  { to: '/achievements', label: 'Character' },
 ]
 
 const LOG_LINK = { to: '/log', label: 'Log Workout' }
 
-const SECONDARY_LINKS = [
-  { to: '/scores', label: 'Scores' },
-  { to: '/achievements', label: 'Character' },
-  { to: '/compliance', label: 'Compliance' },
-  { to: '/frequency', label: 'Frequency' },
-  { to: '/amrap', label: 'AMRAP' },
-  { to: '/tonnage', label: 'Tonnage' },
-  { to: '/bodyweight', label: 'Bodyweight' },
-  { to: '/muscles', label: 'Muscles' },
-  { to: '/overall', label: 'Overall' },
-  { to: '/goals', label: 'Goals' },
+const SECONDARY_GROUPS = [
+  { heading: 'Training',  links: [
+    { to: '/journal', label: 'Journal' },
+    { to: '/compliance', label: 'Compliance' },
+    { to: '/frequency', label: 'Frequency' },
+  ]},
+  { heading: 'Tracking', links: [
+    { to: '/tonnage', label: 'Tonnage' },
+    { to: '/bodyweight', label: 'Bodyweight' },
+    { to: '/amrap', label: 'AMRAP' },
+  ]},
+  { heading: 'Deep Dive', links: [
+    { to: '/muscles', label: 'Muscles' },
+    { to: '/overall', label: 'Overall' },
+    { to: '/goals', label: 'Goals' },
+  ]},
 ]
+
+const ALL_SECONDARY_LINKS = SECONDARY_GROUPS.flatMap((g) => g.links)
 
 export default function NavBar() {
   const location = useLocation()
@@ -51,17 +59,22 @@ export default function NavBar() {
             <button
               onClick={() => setMoreOpen(!moreOpen)}
               onBlur={() => setTimeout(() => setMoreOpen(false), 150)}
-              className={`navbar-link border-none bg-transparent cursor-pointer font-inherit${SECONDARY_LINKS.some((l) => isActive(l.to)) ? ' active' : ''}`}
+              className={`navbar-link border-none bg-transparent cursor-pointer font-inherit${ALL_SECONDARY_LINKS.some((l) => isActive(l.to)) ? ' active' : ''}`}
             >
               More ▾
             </button>
             {moreOpen && (
-              <div className="absolute top-full right-0 mt-1 rounded-md p-1 min-w-[150px] z-200 shadow-lg border border-border bg-bg-card-solid">
-                {SECONDARY_LINKS.map((link) => (
-                  <Link key={link.to} to={link.to} onClick={() => setMoreOpen(false)}
-                    className={`navbar-link block py-1.5 px-3 text-sm${isActive(link.to) ? ' active' : ''}`}>
-                    {link.label}
-                  </Link>
+              <div className="absolute top-full right-0 mt-1 rounded-md p-1 min-w-[160px] z-200 shadow-lg border border-border bg-bg-card-solid">
+                {SECONDARY_GROUPS.map((group) => (
+                  <div key={group.heading}>
+                    <div className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider opacity-40 font-bold">{group.heading}</div>
+                    {group.links.map((link) => (
+                      <Link key={link.to} to={link.to} onClick={() => setMoreOpen(false)}
+                        className={`navbar-link block py-1.5 px-3 text-sm${isActive(link.to) ? ' active' : ''}`}>
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
                 ))}
               </div>
             )}
@@ -86,9 +99,13 @@ export default function NavBar() {
           {PRIMARY_LINKS.map((link) => (
             <Link key={link.to} to={link.to} className={`navbar-mobile-link${isActive(link.to) ? ' active' : ''}`} onClick={() => setMobileOpen(false)}>{link.label}</Link>
           ))}
-          <div className="navbar-mobile-section">More</div>
-          {SECONDARY_LINKS.map((link) => (
-            <Link key={link.to} to={link.to} className={`navbar-mobile-link${isActive(link.to) ? ' active' : ''}`} onClick={() => setMobileOpen(false)}>{link.label}</Link>
+          {SECONDARY_GROUPS.map((group) => (
+            <div key={group.heading}>
+              <div className="navbar-mobile-section">{group.heading}</div>
+              {group.links.map((link) => (
+                <Link key={link.to} to={link.to} className={`navbar-mobile-link${isActive(link.to) ? ' active' : ''}`} onClick={() => setMobileOpen(false)}>{link.label}</Link>
+              ))}
+            </div>
           ))}
         </div>
       </div>

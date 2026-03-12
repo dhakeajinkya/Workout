@@ -3,9 +3,9 @@ export { estimate1RM, MAX_REPS_FOR_1RM } from './e1rm.js';
 
 // Scoring
 export {
-  calcLiftScore, calcOverallScore, getLevel,
-  LIFT_RATIOS, LEVEL_THRESHOLDS, LEVELS, LEVEL_COLORS, SCORING_CATEGORIES,
-  type ScoringFormula,
+  calcLiftScore, calcOverallScore, getLevel, calculateDOTS,
+  LIFT_RATIOS, getLiftRatio, LEVEL_THRESHOLDS, LEVELS, LEVEL_COLORS, SCORING_CATEGORIES,
+  type ScoringFormula, type Sex,
 } from './scoring.js';
 
 // Muscles

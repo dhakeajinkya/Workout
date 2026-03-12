@@ -71,7 +71,7 @@ export function calcSymmetryScore(scores: number[]): number {
   if (scores.length < 2) return 100;
   const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
   const variance = scores.reduce((sum, s) => sum + (s - mean) ** 2, 0) / scores.length;
-  return Math.round((100 - variance) * 10) / 10;
+  return Math.max(0, Math.round((100 - variance) * 10) / 10);
 }
 
 export const LIFT_MUSCLE_MAP: Record<string, string[]> = {

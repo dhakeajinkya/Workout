@@ -77,12 +77,23 @@ export async function setSetting(key: string, value: string) {
   await db.put('settings', { key, value });
 }
 
+/** Escape a CSV field: quote if it contains commas/quotes/newlines, strip formula injection prefixes. */
+function csvField(value: string | number | undefined): string {
+  const s = String(value ?? '');
+  // Strip leading characters that spreadsheet apps interpret as formulas
+  const safe = s.replace(/^[=+\-@\t\r]+/, '');
+  if (safe.includes(',') || safe.includes('"') || safe.includes('\n')) {
+    return `"${safe.replace(/"/g, '""')}"`;
+  }
+  return safe;
+}
+
 export async function exportLiftsAsCSV(): Promise<string> {
   const lifts = await getLocalLifts();
   if (lifts.length === 0) return '';
   const header = 'date,bodyweight,lift,weight,reps,set_type,notes,sleep';
   const rows = lifts.map((l) =>
-    `${l.date},${l.bodyweight},${l.lift},${l.weight},${l.reps},${l.set_type},${l.notes},${l.sleep || ''}`
+    [l.date, l.bodyweight, l.lift, l.weight, l.reps, l.set_type, l.notes, l.sleep || ''].map(csvField).join(',')
   );
   return [header, ...rows].join('\n');
 }

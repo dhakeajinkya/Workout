@@ -57,7 +57,7 @@ export function calcWeeklyStreak(
   trainingDaysPerWeek: number,
 ): WeeklyStreak {
   if (sessions.length === 0 || trainingDaysPerWeek <= 0) {
-    return { streak: 0, currentWeekSessions: 0, requiredPerWeek: trainingDaysPerWeek, currentWeekComplete: false };
+    return { streak: 0, currentWeekSessions: 0, requiredPerWeek: Math.ceil(trainingDaysPerWeek * 0.8), currentWeekComplete: false };
   }
 
   // Count sessions per week (Monday-based)
@@ -87,5 +87,5 @@ export function calcWeeklyStreak(
     }
   }
 
-  return { streak, currentWeekSessions, requiredPerWeek: trainingDaysPerWeek, currentWeekComplete };
+  return { streak, currentWeekSessions, requiredPerWeek: threshold, currentWeekComplete };
 }
