@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { addLift, exportLiftsAsCSV, clearLocalLifts } from '../lib/storage';
 import { normalizeLiftName } from '../lib/scoring';
 import { useLifts, groupByDay, calcWeeklyStreak } from '../lib/useLifts';
@@ -197,7 +197,7 @@ function clearSession() {
 export default function Log() {
   const { entries, loading, refreshLocalLifts } = useLifts();
   const { days: computedDays } = useProgramData();
-  const program = computedDaysToProgramDays(computedDays);
+  const program = useMemo(() => computedDaysToProgramDays(computedDays), [computedDays]);
   const [selectedDay, setSelectedDay] = useState(0);
   const [exercises, setExercises] = useState<WorkoutExercise[]>([]);
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
