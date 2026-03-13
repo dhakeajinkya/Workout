@@ -82,7 +82,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-5 mb-3">
           <div className="flex-shrink-0 relative">
             <div className="rounded-xl overflow-hidden" style={{ boxShadow: `0 0 20px ${status.glowColor}` }}>
-              <AnimatedFace file="GodMode.jpg" fw={512} fh={512} size={96} duration={2.0} />
+              <AnimatedFace file={status.sprite} fw={512} fh={512} size={96} duration={2.0} />
             </div>
             <SpeechBubble visible={speech.visible} text={speech.text} typing={speech.typing} />
           </div>

@@ -21,6 +21,8 @@ export interface TrainingStatus {
   eyeColor: string;
   /** Background glow color */
   glowColor: string;
+  /** Sprite sheet filename for AnimatedFace */
+  sprite: string;
 }
 
 // ─── Status Mapping ────────────────────────────────────────
@@ -32,6 +34,7 @@ const STATUS_MAP: Record<StatusLevel, Omit<TrainingStatus, 'level'>> = {
     faceColor: '#e57373',
     eyeColor: '#ff1744',
     glowColor: 'rgba(255,23,68,0.3)',
+    sprite: 'GodMode.jpg',
   },
   determined: {
     label: 'Determined',
@@ -39,6 +42,7 @@ const STATUS_MAP: Record<StatusLevel, Omit<TrainingStatus, 'level'>> = {
     faceColor: '#ffb74d',
     eyeColor: '#fff',
     glowColor: 'rgba(255,183,77,0.2)',
+    sprite: 'Bloodlust.jpg',
   },
   steady: {
     label: 'Steady',
@@ -46,6 +50,7 @@ const STATUS_MAP: Record<StatusLevel, Omit<TrainingStatus, 'level'>> = {
     faceColor: '#81c784',
     eyeColor: '#fff',
     glowColor: 'rgba(129,199,132,0.15)',
+    sprite: 'Determined.jpg',
   },
   tired: {
     label: 'Tired',
@@ -53,6 +58,7 @@ const STATUS_MAP: Record<StatusLevel, Omit<TrainingStatus, 'level'>> = {
     faceColor: '#90a4ae',
     eyeColor: '#78909c',
     glowColor: 'rgba(144,164,174,0.15)',
+    sprite: 'SleepMode.png',
   },
   wrecked: {
     label: 'Wrecked',
@@ -60,6 +66,7 @@ const STATUS_MAP: Record<StatusLevel, Omit<TrainingStatus, 'level'>> = {
     faceColor: '#78909c',
     eyeColor: '#546e7a',
     glowColor: 'rgba(84,110,122,0.15)',
+    sprite: 'Test.png',
   },
 };
 
