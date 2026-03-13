@@ -13,7 +13,9 @@
   "dependencies": {
     "@ironlogs/core": "workspace:*",
     "@ironlogs/csv-parser": "workspace:*",
-    "@ironlogs/analytics": "workspace:*"
+    "@ironlogs/analytics": "workspace:*",
+    "@ironlogs/plugin-api": "workspace:*",
+    "@ironlogs/plugin-nsuns": "workspace:*"
   },
   "devDependencies": {
     "tsup": "^8.0.0",

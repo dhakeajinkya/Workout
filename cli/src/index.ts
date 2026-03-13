@@ -9,6 +9,9 @@ import {
   getAllStrengthVelocities, detectPlateaus, calcFatigue,
   findPRs, getUniqueLifts,
 } from '@ironlogs/analytics';
+import { computeProgram } from '@ironlogs/plugin-api';
+import type { TrainingMaxes } from '@ironlogs/plugin-api';
+import { NSUNS_5DAY_TEMPLATE } from '@ironlogs/plugin-nsuns';
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -21,6 +24,7 @@ Usage:
   ironlogs analyze <file.csv>                  Analyze a training log
   ironlogs validate <file.csv>                 Validate CSV format
   ironlogs report <file.csv> [--output <dir>]  Generate static HTML report
+  ironlogs program <bench> <squat> <dl> <ohp>  Show program with computed weights
   ironlogs --help                              Show this help
 
 Examples:
@@ -28,6 +32,7 @@ Examples:
   ironlogs validate my_data.csv
   ironlogs report training.csv
   ironlogs report training.csv --output ./my-report
+  ironlogs program 62.5 80 105 50
 `);
   process.exit(0);
 }
@@ -384,6 +389,51 @@ function generateReportHTML(data: {
   <footer>IronLogs -- open source strength analytics</footer>
 </body>
 </html>`;
+}
+
+if (command === 'program') {
+  const [benchTM, squatTM, dlTM, ohpTM] = args.slice(1).map(Number);
+  if (!benchTM || !squatTM || !dlTM || !ohpTM) {
+    console.error('Usage: ironlogs program <bench_tm> <squat_tm> <deadlift_tm> <ohp_tm>');
+    console.error('Example: ironlogs program 62.5 80 105 50');
+    process.exit(1);
+  }
+
+  const tms: TrainingMaxes = { bench: benchTM, squat: squatTM, deadlift: dlTM, ohp: ohpTM };
+  const roundTo = 5;
+  const days = computeProgram(NSUNS_5DAY_TEMPLATE, tms, roundTo);
+
+  console.log(`\n  nSuns 5-Day LP — TMs: bench=${benchTM} squat=${squatTM} deadlift=${dlTM} ohp=${ohpTM} (round to ${roundTo}kg)`);
+  console.log(`  ${'═'.repeat(60)}`);
+
+  for (const day of days) {
+    if (day.rest) {
+      console.log(`\n  ${day.name}: ${day.label}`);
+      continue;
+    }
+
+    console.log(`\n  ${day.name}: ${day.label}`);
+
+    if (day.t1) {
+      const sets = day.t1.sets.map((s) => {
+        const reps = String(s.reps);
+        return reps.includes('+') ? `\x1b[1m${s.weight}x${reps}\x1b[0m` : `${s.weight}x${reps}`;
+      }).join('  ');
+      console.log(`    T1 ${day.t1.lift.padEnd(14)} ${sets}`);
+    }
+
+    if (day.t2) {
+      const sets = day.t2.sets.map((s) => `${s.weight}x${s.reps}`).join('  ');
+      console.log(`    T2 ${day.t2.lift.padEnd(14)} ${sets}`);
+    }
+
+    if (day.accessories && day.accessories.length > 0) {
+      console.log(`    ACC ${day.accessories.join(', ')}`);
+    }
+  }
+
+  console.log();
+  process.exit(0);
 }
 
 console.error(`Unknown command: ${command}. Use --help for usage.`);

@@ -123,6 +123,12 @@ importers:
       '@ironlogs/csv-parser':
         specifier: workspace:*
         version: link:../packages/csv-parser
+      '@ironlogs/plugin-api':
+        specifier: workspace:*
+        version: link:../packages/plugin-api
+      '@ironlogs/plugin-nsuns':
+        specifier: workspace:*
+        version: link:../plugins/nsuns
     devDependencies:
       tsup:
         specifier: ^8.0.0
