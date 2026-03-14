@@ -290,19 +290,40 @@ date,bodyweight,lift,weight,reps,set_type,notes,sleep
 2026-03-12,82.6,ohp,35,4,t2,,6
 2026-03-12,82.6,ohp,35,6,t2,,6
 2026-03-12,82.6,ohp,35,8,t2,,6
-2026-03-14,81.55,deadlift,80,5,t1,,5
-2026-03-14,81.55,deadlift,90,3,t1,,5
-2026-03-14,81.55,deadlift,100,8,t1_amrap,programmed 1+,5
-2026-03-14,81.55,deadlift,95,3,t1,,5
-2026-03-14,81.55,deadlift,90,3,t1,,5
-2026-03-14,81.55,deadlift,85,3,t1,,5
-2026-03-14,81.55,deadlift,80,3,t1,,5
-2026-03-14,81.55,deadlift,75,3,t1,,5
-2026-03-14,81.55,deadlift,70,6,t1_amrap,programmed 3+,5
-2026-03-14,81.55,front_squat,30,6,t2,,5
-2026-03-14,81.55,front_squat,35,5,t2,,5
-2026-03-14,81.55,front_squat,45,3,t2,,5
-2026-03-14,81.55,front_squat,45,5,t2,,5
-2026-03-14,81.55,front_squat,45,7,t2,,5
-2026-03-14,81.55,front_squat,45,4,t2,,5
-2026-03-14,81.55,front_squat,45,6,t2,,5
+2026-03-13,81.55,deadlift,80,5,t1,,5
+2026-03-13,81.55,deadlift,90,3,t1,,5
+2026-03-13,81.55,deadlift,100,8,t1_amrap,programmed 1+,5
+2026-03-13,81.55,deadlift,95,3,t1,,5
+2026-03-13,81.55,deadlift,90,3,t1,,5
+2026-03-13,81.55,deadlift,85,3,t1,,5
+2026-03-13,81.55,deadlift,80,3,t1,,5
+2026-03-13,81.55,deadlift,75,3,t1,,5
+2026-03-13,81.55,deadlift,70,6,t1_amrap,programmed 3+,5
+2026-03-13,81.55,front_squat,30,6,t2,,5
+2026-03-13,81.55,front_squat,35,5,t2,,5
+2026-03-13,81.55,front_squat,45,3,t2,,5
+2026-03-13,81.55,front_squat,45,5,t2,,5
+2026-03-13,81.55,front_squat,45,7,t2,,5
+2026-03-13,81.55,front_squat,45,4,t2,,5
+2026-03-13,81.55,front_squat,45,6,t2,,5
+2026-03-14,82,ohp,40,5,t1,,7
+2026-03-14,82,ohp,45,3,t1,,7
+2026-03-14,82,ohp,50,3,t1_amrap,programmed 1+,7
+2026-03-14,82,ohp,45,3,t1,,7
+2026-03-14,82,ohp,45,3,t1,,7
+2026-03-14,82,ohp,40,3,t1,,7
+2026-03-14,82,ohp,40,5,t1,,7
+2026-03-14,82,ohp,35,5,t1,,7
+2026-03-14,82,ohp,35,12,t1_amrap,programmed 5+,7
+2026-03-14,82,incline_bench,25,6,t2,,7
+2026-03-14,82,incline_bench,30,5,t2,,7
+2026-03-14,82,incline_bench,40,3,t2,,7
+2026-03-14,82,incline_bench,40,5,t2,,7
+2026-03-14,82,incline_bench,40,7,t2,,7
+2026-03-14,82,incline_bench,40,4,t2,,7
+2026-03-14,82,incline_bench,40,6,t2,,7
+2026-03-14,82,incline_bench,40,8,t2,,7
+2026-03-14,82,face_pulls,57,10,accessory,,7
+2026-03-14,82,face_pulls,57,10,accessory,,7
+2026-03-14,82,pendlay_row,45,7,accessory,,7
+2026-03-14,82,pendlay_row,45,7,accessory,,7

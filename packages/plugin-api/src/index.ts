@@ -70,6 +70,18 @@ export interface TemplateDay {
   accessories?: string[];
 }
 
+/** A training block within a periodized program */
+export interface TrainingBlock {
+  id: string;
+  name: string;
+  /** Phase label (e.g., 'accumulation', 'intensification', 'realization') */
+  phase: string;
+  /** Duration in weeks */
+  weeks: number;
+  /** Weekly template for this block */
+  days: TemplateDay[];
+}
+
 export interface ProgramTemplate {
   id: string;
   name: string;
@@ -78,7 +90,14 @@ export interface ProgramTemplate {
   tmFactor: number;
   /** Lifts that have training maxes */
   tmLifts: string[];
+  /** Weekly template (used when there are no blocks) */
   days: TemplateDay[];
+  /** Optional periodized block structure. When present, the active block's
+   *  days are used instead of the top-level `days` array. */
+  blocks?: TrainingBlock[];
+  /** How blocks cycle: 'once' runs linearly then stops, 'repeat' loops.
+   *  Defaults to 'once'. Only meaningful when `blocks` is set. */
+  cycle?: 'once' | 'repeat';
 }
 
 /** Training maxes keyed by lift name */
@@ -95,13 +114,61 @@ export function computeWeight(tm: number, pct: number, roundTo: number): number 
   return mround(tm * pct, roundTo);
 }
 
-/** Compute a full program with absolute weights from a template + training maxes */
+/**
+ * Resolve which training block is active for a periodized program.
+ * Returns null for non-periodized programs or if the program has ended (non-repeating).
+ */
+export function getActiveBlock(
+  template: ProgramTemplate,
+  startDate: string,
+  today?: string,
+): { block: TrainingBlock; weekInBlock: number; blockIndex: number } | null {
+  if (!template.blocks || template.blocks.length === 0) return null;
+
+  const start = new Date(startDate + 'T00:00:00');
+  const now = today ? new Date(today + 'T00:00:00') : new Date();
+  const daysSinceStart = Math.floor((now.getTime() - start.getTime()) / 86400000);
+  if (daysSinceStart < 0) return null;
+
+  const weeksSinceStart = Math.floor(daysSinceStart / 7);
+  const totalWeeks = template.blocks.reduce((sum, b) => sum + b.weeks, 0);
+
+  let effectiveWeek = weeksSinceStart;
+  if (template.cycle === 'repeat' && totalWeeks > 0) {
+    effectiveWeek = weeksSinceStart % totalWeeks;
+  } else if (weeksSinceStart >= totalWeeks) {
+    return null; // program ended
+  }
+
+  let accumulated = 0;
+  for (let i = 0; i < template.blocks.length; i++) {
+    const block = template.blocks[i];
+    if (effectiveWeek < accumulated + block.weeks) {
+      return { block, weekInBlock: effectiveWeek - accumulated + 1, blockIndex: i };
+    }
+    accumulated += block.weeks;
+  }
+  return null;
+}
+
+/**
+ * Compute a full program with absolute weights from a template + training maxes.
+ * If startDate is provided and the template has blocks, uses the active block's days.
+ */
 export function computeProgram(
   template: ProgramTemplate,
   tms: TrainingMaxes,
   roundTo: number,
+  startDate?: string,
 ): ComputedDay[] {
-  return template.days.map((day) => {
+  let templateDays = template.days;
+
+  if (startDate && template.blocks) {
+    const active = getActiveBlock(template, startDate);
+    if (active) templateDays = active.block.days;
+  }
+
+  return templateDays.map((day) => {
     if (day.rest) {
       return { name: day.name, label: day.label, rest: true };
     }

@@ -7,6 +7,7 @@
     { "path": "packages/gamification" },
     { "path": "packages/plugin-api" },
     { "path": "plugins/nsuns" },
+    { "path": "plugins/asc-mup" },
     { "path": "apps/web" },
     { "path": "cli" }
   ]

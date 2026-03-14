@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { computeProgram } from '@ironlogs/plugin-api';
 import type { ComputedDay } from '@ironlogs/plugin-api';
-import { NSUNS_5DAY_TEMPLATE } from '@ironlogs/plugin-nsuns';
+import { NSUNS_6DAY_DL_TEMPLATE } from '@ironlogs/plugin-nsuns';
 import { USER_CONFIG } from '../config';
 
 interface ProgramData {
@@ -12,7 +12,7 @@ interface ProgramData {
 
 export function useProgramData(): ProgramData {
   const days = useMemo(
-    () => computeProgram(NSUNS_5DAY_TEMPLATE, USER_CONFIG.trainingMaxes, USER_CONFIG.roundTo),
+    () => computeProgram(NSUNS_6DAY_DL_TEMPLATE, USER_CONFIG.trainingMaxes, USER_CONFIG.roundTo),
     [],
   );
 

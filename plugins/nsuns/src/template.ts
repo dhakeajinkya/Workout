@@ -27,10 +27,10 @@ function t2Sets(startPct: number): { pct: number; reps: number }[] {
   ];
 }
 
-export const NSUNS_5DAY_TEMPLATE: ProgramTemplate = {
-  id: 'nsuns-5day-lp',
-  name: 'nSuns 5-Day LP',
-  description: 'nSuns 5/3/1 Linear Progression — 5 training days + 1 light day + rest',
+export const NSUNS_6DAY_DL_TEMPLATE: ProgramTemplate = {
+  id: 'nsuns-6day-dl-lp',
+  name: 'nSuns 6-Day Deadlift LP',
+  description: 'nSuns 5/3/1 Linear Progression — 6 training days (deadlift focus) + rest',
   tmFactor: 0.9,
   tmLifts: ['bench', 'squat', 'deadlift', 'ohp'],
   days: [

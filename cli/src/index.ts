@@ -11,7 +11,7 @@ import {
 } from '@ironlogs/analytics';
 import { computeProgram } from '@ironlogs/plugin-api';
 import type { TrainingMaxes } from '@ironlogs/plugin-api';
-import { NSUNS_5DAY_TEMPLATE } from '@ironlogs/plugin-nsuns';
+import { NSUNS_6DAY_DL_TEMPLATE } from '@ironlogs/plugin-nsuns';
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -401,7 +401,7 @@ if (command === 'program') {
 
   const tms: TrainingMaxes = { bench: benchTM, squat: squatTM, deadlift: dlTM, ohp: ohpTM };
   const roundTo = 5;
-  const days = computeProgram(NSUNS_5DAY_TEMPLATE, tms, roundTo);
+  const days = computeProgram(NSUNS_6DAY_DL_TEMPLATE, tms, roundTo);
 
   console.log(`\n  nSuns 5-Day LP — TMs: bench=${benchTM} squat=${squatTM} deadlift=${dlTM} ohp=${ohpTM} (round to ${roundTo}kg)`);
   console.log(`  ${'═'.repeat(60)}`);

@@ -5,7 +5,7 @@ export const USER_CONFIG = {
   units: 'kg' as const,
   targetBodyweight: 76,
   /** Program plugin to use */
-  program: 'nsuns-5day-lp' as const,
+  program: 'nsuns-6day-dl-lp' as const,
   /** Rounding factor for computed weights (kg) */
   roundTo: 5,
   /** Training maxes — increase by 2.5kg on successful AMRAP each week.

@@ -180,6 +180,15 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  plugins/asc-mup:
+    dependencies:
+      '@ironlogs/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ironlogs/plugin-api':
+        specifier: workspace:*
+        version: link:../../packages/plugin-api
+
   plugins/nsuns:
     dependencies:
       '@ironlogs/analytics':

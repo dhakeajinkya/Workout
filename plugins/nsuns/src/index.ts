@@ -3,4 +3,4 @@ export {
   getComplianceData, getComplianceSummary,
   type ComplianceData, type ComplianceSummary,
 } from './compliance.js';
-export { NSUNS_5DAY_TEMPLATE } from './template.js';
+export { NSUNS_6DAY_DL_TEMPLATE } from './template.js';
