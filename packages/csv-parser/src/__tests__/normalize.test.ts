@@ -46,6 +46,13 @@ describe('normalizeLiftName', () => {
     expect(normalizeLiftName('barbell_row')).toBe('pendlay_row');
   });
 
+  it('normalizes "seated_row" to "seated_row" (not pendlay_row)', () => {
+    expect(normalizeLiftName('seated_row')).toBe('seated_row');
+    expect(normalizeLiftName('Seated Row')).toBe('seated_row');
+    expect(normalizeLiftName('cable_row')).toBe('seated_row');
+    expect(normalizeLiftName('machine_row')).toBe('seated_row');
+  });
+
   it('normalizes "close_grip_bench" to "cgbench"', () => {
     expect(normalizeLiftName('close_grip_bench')).toBe('cgbench');
   });

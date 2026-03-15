@@ -2,7 +2,7 @@
 export const CANONICAL_LIFTS = [
   'bench', 'squat', 'deadlift', 'ohp',
   'cgbench', 'incline_bench', 'front_squat', 'sumo_deadlift',
-  'chinup', 'pullup', 'pendlay_row', 'power_clean', 'push_press', 'snatch_press',
+  'chinup', 'pullup', 'pendlay_row', 'seated_row', 'power_clean', 'push_press', 'snatch_press',
 ] as const;
 
 export type CanonicalLift = typeof CANONICAL_LIFTS[number];
@@ -28,6 +28,8 @@ export const LIFT_ALIASES: Record<string, string> = {
   'barbell_row': 'pendlay_row',
   'bent_over_row': 'pendlay_row',
   'row': 'pendlay_row',
+  'cable_row': 'seated_row',
+  'machine_row': 'seated_row',
 };
 
 /** Primary lifts used for scoring */
