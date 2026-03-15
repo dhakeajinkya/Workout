@@ -28,6 +28,7 @@ const Log = lazyRetry(() => import('./pages/Log'))
 const Achievements = lazyRetry(() => import('./pages/Achievements'))
 const Analytics = lazyRetry(() => import('./pages/Analytics'))
 const Compliance = lazyRetry(() => import('./pages/Compliance'))
+const Program = lazyRetry(() => import('./pages/Program'))
 
 function PageLoader() {
   return <BarbellLoader size={56} />
@@ -54,6 +55,7 @@ export default function App() {
           <Route path="/achievements" element={<Achievements />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/compliance" element={<Compliance />} />
+          <Route path="/program" element={<Program />} />
         </Routes>
       </Suspense>
       </ErrorBoundary>

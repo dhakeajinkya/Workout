@@ -41,6 +41,9 @@ importers:
       '@ironlogs/plugin-api':
         specifier: workspace:*
         version: link:../../packages/plugin-api
+      '@ironlogs/plugin-asc-mup':
+        specifier: workspace:*
+        version: link:../../plugins/asc-mup
       '@ironlogs/plugin-nsuns':
         specifier: workspace:*
         version: link:../../plugins/nsuns

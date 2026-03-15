@@ -16,6 +16,7 @@
     "@ironlogs/gamification": "workspace:*",
     "@ironlogs/plugin-api": "workspace:*",
     "@ironlogs/plugin-nsuns": "workspace:*",
+    "@ironlogs/plugin-asc-mup": "workspace:*",
     "chart.js": "^4.5.1",
     "chartjs-adapter-date-fns": "^3.0.0",
     "idb": "^8.0.3",

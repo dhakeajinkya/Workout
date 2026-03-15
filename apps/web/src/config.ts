@@ -6,6 +6,9 @@ export const USER_CONFIG = {
   targetBodyweight: 76,
   /** Program plugin to use */
   program: 'nsuns-6day-dl-lp' as const,
+  /** When this program started (ISO date). Used for block resolution in
+   *  periodized programs; informational for flat programs like nSuns. */
+  programStartDate: '2026-02-09',
   /** Rounding factor for computed weights (kg) */
   roundTo: 5,
   /** Training maxes — increase by 2.5kg on successful AMRAP each week.

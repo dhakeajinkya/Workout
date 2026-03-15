@@ -7,6 +7,7 @@ const PRIMARY_LINKS = [
   { to: '/progression', label: 'Progress' },
   { to: '/analytics', label: 'Analytics' },
   { to: '/achievements', label: 'Character' },
+  { to: '/program', label: 'Program' },
 ]
 
 const LOG_LINK = { to: '/log', label: 'Log Workout' }

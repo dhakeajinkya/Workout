@@ -4,8 +4,7 @@ import { calcLiftFatigue } from '../lib/analytics';
 import { LIFT_LABELS, LIFT_COLORS } from '../lib/liftMeta';
 import { useProgramData } from '../lib/useProgramData';
 import type { ComputedSet, ComputedDay } from '@ironlogs/plugin-api';
-
-import { detectProgramDay } from '../lib/programDetection';
+import { getNextDayIndex } from '../lib/programDetection';
 
 function SetPill({ set, liftColor }: { set: ComputedSet; liftColor: string }) {
   const isAmrap = typeof set.reps === 'string' && String(set.reps).includes('+');
@@ -26,42 +25,32 @@ export default function TodaySession() {
 
   if (loading || programLoading || days.length === 0) return <p className="text-text-muted">Loading...</p>;
 
-  const program = { days };
-
   const sessions = groupByDay(entries);
   if (sessions.length === 0) return <p>No session data yet.</p>;
 
-  const lastSession = sessions[sessions.length - 1];
-  const lastT1Lifts = lastSession.lifts.filter((l) => l.set_type === 't1' || l.set_type === 't1_amrap');
-  if (lastT1Lifts.length === 0) return <p>Could not detect last program day.</p>;
+  let nextDayIndex = getNextDayIndex(days, entries);
 
-  const lastT1Lift = normalizeLiftName(lastT1Lifts[0].lift);
-  const lastHadOnePlus = lastSession.lifts.some((l) => l.set_type === 't1_amrap' && /programmed\s+1\+/.test(l.notes));
-  let nextDayIndex = (detectProgramDay(lastT1Lift, lastHadOnePlus) + 1) % program.days.length;
-
-  // If the next day is a rest day, count how many consecutive rest days follow,
-  // then check if enough days have passed to have completed them all.
-  // e.g. 1 rest day → skip after 2+ days, 2 rest days (Sat+Sun) → skip after 3+ days
-  if (program.days[nextDayIndex].rest) {
+  // If the next day is a rest day, check if enough time has passed to skip it
+  if (days[nextDayIndex]?.rest) {
     let restDays = 0;
-    for (let offset = 0; offset < program.days.length; offset++) {
-      if (program.days[(nextDayIndex + offset) % program.days.length].rest) restDays++;
+    for (let offset = 0; offset < days.length; offset++) {
+      if (days[(nextDayIndex + offset) % days.length].rest) restDays++;
       else break;
     }
+    const lastSession = sessions[sessions.length - 1];
     const lastDate = new Date(lastSession.date + 'T00:00:00');
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     const daysSinceLast = Math.round((now.getTime() - lastDate.getTime()) / 86400000);
     if (daysSinceLast > restDays) {
-      // All rest days completed — advance to next training day
-      for (let offset = 1; offset < program.days.length; offset++) {
-        const idx = (nextDayIndex + offset) % program.days.length;
-        if (!program.days[idx].rest) { nextDayIndex = idx; break; }
+      for (let offset = 1; offset < days.length; offset++) {
+        const idx = (nextDayIndex + offset) % days.length;
+        if (!days[idx].rest) { nextDayIndex = idx; break; }
       }
     }
   }
 
-  const todayProgram = program.days[nextDayIndex];
+  const todayProgram = days[nextDayIndex];
 
   if (todayProgram.rest) {
     const REST_MESSAGES = [
@@ -70,11 +59,11 @@ export default function TodaySession() {
       'No iron today. Your CNS thanks you.',
       'Deload your brain too. You\'ve earned it.',
     ];
-    const restMsg = REST_MESSAGES[Math.floor(Math.random() * REST_MESSAGES.length)];
+    const restMsg = REST_MESSAGES[nextDayIndex % REST_MESSAGES.length];
     // Find the next training day after the rest day
     let nextTrainingDay: ComputedDay | null = null;
-    for (let offset = 1; offset < program.days.length; offset++) {
-      const candidate = program.days[(nextDayIndex + offset) % program.days.length];
+    for (let offset = 1; offset < days.length; offset++) {
+      const candidate = days[(nextDayIndex + offset) % days.length];
       if (!candidate.rest) { nextTrainingDay = candidate; break; }
     }
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });

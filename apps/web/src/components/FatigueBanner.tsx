@@ -2,12 +2,14 @@ import { useLifts } from '../lib/useLifts';
 import { calcLiftFatigue } from '../lib/analytics';
 import { LIFT_LABELS_SHORT as LIFT_LABELS } from '../lib/liftMeta';
 import { detectNextT1 } from '../lib/programDetection';
+import { useProgramData } from '../lib/useProgramData';
 
 export default function FatigueBanner() {
   const { entries, loading } = useLifts();
+  const { days } = useProgramData();
   if (loading) return null;
 
-  const nextT1 = detectNextT1(entries);
+  const nextT1 = detectNextT1(days, entries);
   if (!nextT1) return null;
 
   const fatigue = calcLiftFatigue(entries, nextT1);
