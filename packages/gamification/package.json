@@ -1,5 +1,5 @@
 {
-  "name": "@ironlogs/gamification",
+  "name": "@Workout/gamification",
   "version": "0.1.0",
   "type": "module",
   "main": "src/index.ts",
@@ -8,8 +8,8 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@ironlogs/core": "workspace:*",
-    "@ironlogs/csv-parser": "workspace:*",
-    "@ironlogs/analytics": "workspace:*"
+    "@Workout/core": "workspace:*",
+    "@Workout/csv-parser": "workspace:*",
+    "@Workout/analytics": "workspace:*"
   }
 }

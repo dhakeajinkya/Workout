@@ -1,9 +1,9 @@
 /**
- * Boss battles for IronLogs.
+ * Boss battles for Workout.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { getBestRecentSets, getLatestBodyweight } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { getBestRecentSets, getLatestBodyweight } from '@Workout/analytics';
 
 // ─── Boss Battles ───────────────────────────────────────────
 

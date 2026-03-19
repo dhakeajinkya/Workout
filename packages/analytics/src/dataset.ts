@@ -1,6 +1,6 @@
-import type { LiftEntry } from '@ironlogs/core';
-import type { TrainingDataset, LiftSummary, DatasetMeta } from '@ironlogs/core';
-import { normalizeLiftName } from '@ironlogs/csv-parser';
+import type { LiftEntry } from '@Workout/core';
+import type { TrainingDataset, LiftSummary, DatasetMeta } from '@Workout/core';
+import { normalizeLiftName } from '@Workout/csv-parser';
 import { groupByDay } from './volume.js';
 
 /**

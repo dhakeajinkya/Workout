@@ -1,10 +1,10 @@
 /**
- * Daily and weekly quests for IronLogs.
+ * Daily and weekly quests for Workout.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { normalizeLiftName } from '@ironlogs/csv-parser';
-import { groupByDay, findPRs } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { normalizeLiftName } from '@Workout/csv-parser';
+import { groupByDay, findPRs } from '@Workout/analytics';
 
 // ─── Daily Quests ───────────────────────────────────────────
 

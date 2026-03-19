@@ -1,5 +1,5 @@
 {
-  "name": "@ironlogs/web",
+  "name": "@Workout/web",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -10,13 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ironlogs/core": "workspace:*",
-    "@ironlogs/csv-parser": "workspace:*",
-    "@ironlogs/analytics": "workspace:*",
-    "@ironlogs/gamification": "workspace:*",
-    "@ironlogs/plugin-api": "workspace:*",
-    "@ironlogs/plugin-nsuns": "workspace:*",
-    "@ironlogs/plugin-asc-mup": "workspace:*",
+    "@Workout/core": "workspace:*",
+    "@Workout/csv-parser": "workspace:*",
+    "@Workout/analytics": "workspace:*",
+    "@Workout/gamification": "workspace:*",
+    "@Workout/plugin-api": "workspace:*",
+    "@Workout/plugin-nsuns": "workspace:*",
+    "@Workout/plugin-asc-mup": "workspace:*",
     "chart.js": "^4.5.1",
     "chartjs-adapter-date-fns": "^3.0.0",
     "idb": "^8.0.3",

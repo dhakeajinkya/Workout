@@ -2,9 +2,9 @@
  * nSuns 5/3/1 LP program rotation and day detection.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { normalizeLiftName } from '@ironlogs/csv-parser';
-import { groupByDay } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { normalizeLiftName } from '@Workout/csv-parser';
+import { groupByDay } from '@Workout/analytics';
 
 export const PROGRAM_ROTATION = [
   { t1: 'bench', hasOnePlus: false },

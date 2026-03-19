@@ -1,9 +1,9 @@
 /**
- * Lifter classes for IronLogs.
+ * Lifter classes for Workout.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { calcLiftScore, SCORING_CATEGORIES, getBestRecentSets, getLatestBodyweight } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { calcLiftScore, SCORING_CATEGORIES, getBestRecentSets, getLatestBodyweight } from '@Workout/analytics';
 
 // ─── Lifter Classes ─────────────────────────────────────────
 

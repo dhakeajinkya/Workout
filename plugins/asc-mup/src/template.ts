@@ -17,7 +17,7 @@
  * between accumulation (variations) and intensification (competition).
  */
 
-import type { ProgramTemplate, TemplateDay } from '@ironlogs/plugin-api';
+import type { ProgramTemplate, TemplateDay } from '@Workout/plugin-api';
 
 // ─── Block 1: Accumulation 10s ──────────────────────────────
 

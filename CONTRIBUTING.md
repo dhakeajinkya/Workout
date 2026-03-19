@@ -1,10 +1,10 @@
-# Contributing to IronLogs
+# Contributing to Workout
 
 ## Dev Setup
 
 ```bash
-git clone https://github.com/<your-fork>/ironlogs.git
-cd ironlogs
+git clone https://github.com/<your-fork>/Workout.git
+cd Workout
 pnpm install
 pnpm dev          # starts the web app
 ```
@@ -15,9 +15,9 @@ pnpm dev          # starts the web app
 |---------|-------------|
 | `pnpm install` | Install all dependencies |
 | `pnpm dev` | Start the web app dev server |
-| `pnpm --filter @ironlogs/analytics test:run` | Run analytics tests |
-| `pnpm --filter @ironlogs/csv-parser test:run` | Run csv-parser tests |
-| `pnpm --filter @ironlogs/web build` | Production build of web app |
+| `pnpm --filter @Workout/analytics test:run` | Run analytics tests |
+| `pnpm --filter @Workout/csv-parser test:run` | Run csv-parser tests |
+| `pnpm --filter @Workout/web build` | Production build of web app |
 
 ## Monorepo Structure
 
@@ -45,7 +45,7 @@ All analytics live in `packages/analytics/src/`. Each module should be a set of 
 
 ```ts
 // packages/analytics/src/myModule.ts
-import type { LiftEntry } from "@ironlogs/core";
+import type { LiftEntry } from "@Workout/core";
 
 export function calculateSomething(entries: LiftEntry[]): number {
   // your math here
@@ -63,16 +63,16 @@ export { calculateSomething } from "./myModule";
 
 ## How to Write a Plugin
 
-Plugins implement the `IronLogsPlugin` interface from `@ironlogs/plugin-api`.
+Plugins implement the `WorkoutPlugin` interface from `@Workout/plugin-api`.
 
 1. Create a new directory under `plugins/`, e.g. `plugins/plugin-myplugin/`.
-2. Add a `package.json` with `@ironlogs/plugin-api` as a dependency.
+2. Add a `package.json` with `@Workout/plugin-api` as a dependency.
 3. Implement the interface:
 
 ```ts
-import type { IronLogsPlugin } from "@ironlogs/plugin-api";
+import type { WorkoutPlugin } from "@Workout/plugin-api";
 
-const myPlugin: IronLogsPlugin = {
+const myPlugin: WorkoutPlugin = {
   name: "my-plugin",
   // implement required methods per the interface
 };
@@ -84,7 +84,7 @@ export default myPlugin;
 
 ## How to Add an Importer
 
-Importers live in `packages/csv-parser/src/importers/`. Each importer normalizes a specific app's export format into IronLogs' internal format.
+Importers live in `packages/csv-parser/src/importers/`. Each importer normalizes a specific app's export format into Workout' internal format.
 
 1. Create a new file in `packages/csv-parser/src/importers/`, e.g. `myApp.ts`.
 2. Export a function that takes raw CSV rows and returns normalized `LiftEntry[]` objects.
@@ -126,7 +126,7 @@ Achievements are defined in `packages/gamification/src/achievements.ts`.
 Tests use **Vitest**. Every new module, importer, achievement, or plugin should have tests.
 
 - Place tests in a `__tests__/` directory adjacent to the source, or co-locate as `*.test.ts` files.
-- Run tests for a specific package: `pnpm --filter @ironlogs/<package> test:run`
+- Run tests for a specific package: `pnpm --filter @Workout/<package> test:run`
 - Tests should be fast and deterministic. No network calls, no file I/O, no timers.
 - Use descriptive test names that state the expected behavior.
 
@@ -145,7 +145,7 @@ describe("calculateSomething", () => {
 
 1. Fork the repo and create a feature branch from `main`.
 2. Make your changes. Keep commits focused -- one logical change per commit.
-3. Ensure all tests pass: run `pnpm --filter @ironlogs/<affected-package> test:run` for each package you touched.
+3. Ensure all tests pass: run `pnpm --filter @Workout/<affected-package> test:run` for each package you touched.
 4. Write a clear PR description: what changed, why, and how to test it.
 5. PRs that touch `packages/` must not introduce UI or browser dependencies.
 6. PRs that add new exports must include tests.

@@ -1,5 +1,5 @@
-import type { LiftEntry, DaySession } from '@ironlogs/core';
-import { normalizeLiftName } from '@ironlogs/csv-parser';
+import type { LiftEntry, DaySession } from '@Workout/core';
+import { normalizeLiftName } from '@Workout/csv-parser';
 
 /**
  * Group lift entries into daily sessions sorted chronologically.

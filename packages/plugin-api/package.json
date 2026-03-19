@@ -1,5 +1,5 @@
 {
-  "name": "@ironlogs/plugin-api",
+  "name": "@Workout/plugin-api",
   "version": "0.1.0",
   "type": "module",
   "main": "src/index.ts",
@@ -8,6 +8,6 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@ironlogs/core": "workspace:*"
+    "@Workout/core": "workspace:*"
   }
 }

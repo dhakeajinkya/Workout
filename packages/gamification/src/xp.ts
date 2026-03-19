@@ -1,5 +1,5 @@
 /**
- * XP system for IronLogs.
+ * XP system for Workout.
  *
  * Four XP sources per session:
  * 1. Tonnage XP — intensity-weighted volume (heavy work > junk volume)
@@ -10,8 +10,8 @@
  * Anti-abuse: sessions under 500kg total tonnage earn 0 XP.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { groupByDay, findPRs, estimate1RM } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { groupByDay, findPRs, estimate1RM } from '@Workout/analytics';
 
 // ─── Constants ─────────────────────────────────────────────
 

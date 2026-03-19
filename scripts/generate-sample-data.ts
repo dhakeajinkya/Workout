@@ -1,7 +1,7 @@
 /**
  * Synthetic nSuns 5/3/1 Training Data Generator
  *
- * Generates a realistic 1-year training log as CSV for IronLogs.
+ * Generates a realistic 1-year training log as CSV for Workout.
  * Run: npx tsx scripts/generate-sample-data.ts
  */
 
@@ -659,7 +659,7 @@ writeFileSync(outPath, [header, ...csvLines].join('\n') + '\n');
 
 const uniquePRDates = new Set(prDates);
 
-console.log('=== IronLogs Sample Data Generator ===\n');
+console.log('=== Workout Sample Data Generator ===\n');
 console.log(`Output:        ${outPath}`);
 console.log(`Date range:    ${formatDate(START_DATE)} to ${formatDate(END_DATE)}`);
 console.log(`Sessions:      ${sessionCount}`);

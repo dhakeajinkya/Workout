@@ -3,9 +3,9 @@
  * Extracted from core analytics — this is program-specific logic.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { normalizeLiftName } from '@ironlogs/csv-parser';
-import { groupByDay } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { normalizeLiftName } from '@Workout/csv-parser';
+import { groupByDay } from '@Workout/analytics';
 
 export interface ComplianceData {
   date: string;

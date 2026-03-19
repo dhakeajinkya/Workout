@@ -5,8 +5,8 @@
 1. **Fork** this repository on GitHub.
 2. **Clone** your fork:
    ```bash
-   git clone https://github.com/<your-username>/ironlogs.git
-   cd ironlogs
+   git clone https://github.com/<your-username>/Workout.git
+   cd Workout
    ```
 3. **Install dependencies** (requires [pnpm](https://pnpm.io/) v9+):
    ```bash
@@ -16,7 +16,7 @@
    ```bash
    npm run dev
    ```
-   The app will be available at `http://localhost:5173/ironlogs/`.
+   The app will be available at `http://localhost:5173/Workout/`.
 
 ## Personal Configuration
 
@@ -75,17 +75,17 @@ npm run typecheck   # Type-check every package
 
 ## Deploying
 
-IronLogs deploys to **GitHub Pages** via a GitHub Actions workflow (`.github/workflows/deploy.yml`).
+Workout deploys to **GitHub Pages** via a GitHub Actions workflow (`.github/workflows/deploy.yml`).
 
 **How it works:**
 1. Push to `main` triggers the workflow (or run it manually via `workflow_dispatch`).
-2. The action installs pnpm, runs `pnpm --filter @ironlogs/web build`, and uploads `apps/web/dist` as a Pages artifact.
+2. The action installs pnpm, runs `pnpm --filter @Workout/web build`, and uploads `apps/web/dist` as a Pages artifact.
 3. GitHub deploys the artifact to your Pages site.
 
 **Setup for your fork:**
 1. Go to your repo's **Settings > Pages**.
 2. Set the source to **GitHub Actions**.
-3. The base path is `/ironlogs/` (configured in `vite.config.ts`). If your repo has a different name, update the `base` option accordingly.
+3. The base path is `/Workout/` (configured in `vite.config.ts`). If your repo has a different name, update the `base` option accordingly.
 4. Push to `main` and the action will deploy automatically.
 
 Client-side routing works on GitHub Pages via an SPA redirect hack in `index.html`.
@@ -145,7 +145,7 @@ const LIFT_INVOLVEMENT: Record<string, Record<MuscleKey, number>> = {
 
 ### 3. Name normalization in `packages/csv-parser/src/normalize.ts`
 
-If users might type the lift name differently (e.g. "close grip bench" vs "cgbench"), add aliases. The normalizer checks `CANONICAL_LIFTS` and `LIFT_ALIASES` from `@ironlogs/core`, so add the canonical name there and any aliases you want to support.
+If users might type the lift name differently (e.g. "close grip bench" vs "cgbench"), add aliases. The normalizer checks `CANONICAL_LIFTS` and `LIFT_ALIASES` from `@Workout/core`, so add the canonical name there and any aliases you want to support.
 
 ## Adding an Achievement
 

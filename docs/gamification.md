@@ -1,6 +1,6 @@
 # Gamification System
 
-IronLogs includes an RPG-inspired gamification layer on top of the training log. Everything described here is computed client-side from your lift entries -- there is no server component.
+Workout includes an RPG-inspired gamification layer on top of the training log. Everything described here is computed client-side from your lift entries -- there is no server component.
 
 ---
 

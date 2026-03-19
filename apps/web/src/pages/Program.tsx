@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useLifts } from '../lib/useLifts';
 import { normalizeLiftName } from '../lib/scoring';
-import { computeProgram } from '@ironlogs/plugin-api';
-import type { ComputedDay, ComputedLift, ProgramTemplate } from '@ironlogs/plugin-api';
+import { computeProgram } from '@Workout/plugin-api';
+import type { ComputedDay, ComputedLift, ProgramTemplate } from '@Workout/plugin-api';
 import { getNextDayIndex } from '../lib/programDetection';
 import { getLiftLabel, getLiftColor } from '../lib/liftMeta';
 import { USER_CONFIG } from '../config';
-import { NSUNS_6DAY_DL_TEMPLATE } from '@ironlogs/plugin-nsuns';
-import { ASC_MUP_TEMPLATE } from '@ironlogs/plugin-asc-mup';
+import { NSUNS_6DAY_DL_TEMPLATE } from '@Workout/plugin-nsuns';
+import { ASC_MUP_TEMPLATE } from '@Workout/plugin-asc-mup';
 
 const PROGRAM_MAP: Record<string, ProgramTemplate> = {
   'nsuns-6day-dl-lp': NSUNS_6DAY_DL_TEMPLATE,

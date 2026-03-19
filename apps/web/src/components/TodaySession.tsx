@@ -3,7 +3,7 @@ import { estimate1RM, normalizeLiftName, calcLiftScore } from '../lib/scoring';
 import { calcLiftFatigue } from '../lib/analytics';
 import { LIFT_LABELS, LIFT_COLORS } from '../lib/liftMeta';
 import { useProgramData } from '../lib/useProgramData';
-import type { ComputedSet, ComputedDay } from '@ironlogs/plugin-api';
+import type { ComputedSet, ComputedDay } from '@Workout/plugin-api';
 import { getNextDayIndex } from '../lib/programDetection';
 
 function SetPill({ set, liftColor }: { set: ComputedSet; liftColor: string }) {

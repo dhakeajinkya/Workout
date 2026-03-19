@@ -1,6 +1,6 @@
 # Security Analysis
 
-IronLogs is a data-local PWA with no backend, no authentication, and no network requests beyond initial asset loading. This document describes the threat model and relevant attack surfaces.
+Workout is a data-local PWA with no backend, no authentication, and no network requests beyond initial asset loading. This document describes the threat model and relevant attack surfaces.
 
 ## Threat Model
 
@@ -46,7 +46,7 @@ IndexedDB is governed by the browser's **same-origin policy**. Only code running
 
 Relevant properties:
 - **No encryption at rest**: Data is stored in plaintext on disk. Anyone with filesystem access to the device can read it. This is acceptable since the data is non-sensitive (lift numbers, bodyweight, sleep hours).
-- **No access control**: Any script on the same origin can read/write all stores. Since IronLogs has no third-party scripts or iframes, this is not a practical concern.
+- **No access control**: Any script on the same origin can read/write all stores. Since Workout has no third-party scripts or iframes, this is not a practical concern.
 - **Three object stores**: `lifts` (with date index), `achievements`, `settings`. No sensitive credentials are stored.
 
 ## PWA / Service Worker Caching

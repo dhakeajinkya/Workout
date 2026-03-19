@@ -4,7 +4,7 @@
  * against the program's computed days array.
  */
 
-import type { ComputedDay } from '@ironlogs/plugin-api';
+import type { ComputedDay } from '@Workout/plugin-api';
 import type { LiftEntry } from './types';
 import { groupByDay } from './useLifts';
 import { normalizeLiftName } from './scoring';

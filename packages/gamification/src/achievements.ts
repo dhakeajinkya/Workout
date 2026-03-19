@@ -1,7 +1,7 @@
-import type { LiftEntry } from '@ironlogs/core';
-import { calcLiftScore, estimate1RM } from '@ironlogs/analytics';
-import { getBestRecentSets, getLatestBodyweight, groupByDay } from '@ironlogs/analytics';
-import { normalizeLiftName } from '@ironlogs/csv-parser';
+import type { LiftEntry } from '@Workout/core';
+import { calcLiftScore, estimate1RM } from '@Workout/analytics';
+import { getBestRecentSets, getLatestBodyweight, groupByDay } from '@Workout/analytics';
+import { normalizeLiftName } from '@Workout/csv-parser';
 import { getRank, RANKS } from './ranks.js';
 
 export type AchievementCategory = 'strength' | 'consistency' | 'endurance' | 'program' | 'legendary' | 'secret';

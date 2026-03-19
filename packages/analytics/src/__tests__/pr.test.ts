@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { LiftEntry } from '@ironlogs/core';
+import type { LiftEntry } from '@Workout/core';
 import { isProgressionSet, findPRs, getBestRecentSets, get1RMProgression } from '../pr.js';
 
 function makeEntry(overrides: Partial<LiftEntry> = {}): LiftEntry {

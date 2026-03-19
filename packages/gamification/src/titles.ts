@@ -1,9 +1,9 @@
 /**
- * Titles (reputation) for IronLogs.
+ * Titles (reputation) for Workout.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { groupByDay } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { groupByDay } from '@Workout/analytics';
 
 // ─── Titles (Reputation) ────────────────────────────────────
 

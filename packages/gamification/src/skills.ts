@@ -1,5 +1,5 @@
 /**
- * Per-lift skill progression system for IronLogs.
+ * Per-lift skill progression system for Workout.
  *
  * Runescape-style: every session gives XP to individual lifts,
  * progress bars always move even during strength plateaus.
@@ -8,8 +8,8 @@
  * Level curve: same exponential as overall (80 × level^1.5)
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { groupByDay } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { groupByDay } from '@Workout/analytics';
 
 // ─── Types ─────────────────────────────────────────────────
 

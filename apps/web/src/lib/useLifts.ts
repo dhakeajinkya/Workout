@@ -25,4 +25,4 @@ export {
   calcWeeklyStreak,
   type FatigueData,
   type WeeklyStreak,
-} from '@ironlogs/analytics';
+} from '@Workout/analytics';

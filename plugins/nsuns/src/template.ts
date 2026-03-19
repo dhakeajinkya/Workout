@@ -6,7 +6,7 @@
  * Actual weight = MROUND(TM * pct, roundTo)
  */
 
-import type { ProgramTemplate } from '@ironlogs/plugin-api';
+import type { ProgramTemplate } from '@Workout/plugin-api';
 
 /**
  * T2 helper: 3 ascending sets then hold top weight for 5 more.

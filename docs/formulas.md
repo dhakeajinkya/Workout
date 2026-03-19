@@ -1,6 +1,6 @@
-# IronLogs Mathematical Formulas
+# Workout Mathematical Formulas
 
-Reference documentation for every formula used in the IronLogs scoring, fatigue, and gamification systems.
+Reference documentation for every formula used in the Workout scoring, fatigue, and gamification systems.
 
 ---
 

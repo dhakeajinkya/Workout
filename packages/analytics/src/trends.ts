@@ -1,5 +1,5 @@
-import type { LiftEntry } from '@ironlogs/core';
-import { normalizeLiftName } from '@ironlogs/csv-parser';
+import type { LiftEntry } from '@Workout/core';
+import { normalizeLiftName } from '@Workout/csv-parser';
 import { estimate1RM } from './e1rm.js';
 import { groupByDay, getSleepProgression } from './volume.js';
 import { get1RMProgression, getBestRecentSets } from './pr.js';

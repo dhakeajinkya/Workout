@@ -3,9 +3,9 @@ import { useLifts } from '../lib/useLifts';
 import { ACHIEVEMENTS, checkAchievements, CATEGORY_INFO, type AchievementCategory } from '../lib/achievements';
 import type { Achievement } from '../lib/achievements';
 import { calcXPProfile, getLifterClass, getTitle, getRank, RANKS, getBosses, getDailyQuests, getWeeklyQuests, getSeasons, getInsights } from '../lib/gamification';
-import { groupByDay, getBestRecentSets } from '@ironlogs/analytics';
+import { groupByDay, getBestRecentSets } from '@Workout/analytics';
 import { useLifetimeStats } from '../lib/useLifetimeStats';
-import type { LiftEntry } from '@ironlogs/core';
+import type { LiftEntry } from '@Workout/core';
 
 const CATEGORIES: AchievementCategory[] = ['strength', 'consistency', 'endurance', 'program', 'legendary', 'secret'];
 

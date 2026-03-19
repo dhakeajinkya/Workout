@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from 'react';
-import type { LiftEntry } from '@ironlogs/core';
-import { parseCSV } from '@ironlogs/csv-parser';
+import type { LiftEntry } from '@Workout/core';
+import { parseCSV } from '@Workout/csv-parser';
 import { getLocalLifts } from './storage';
 
 interface LiftsContextValue {

@@ -1,9 +1,9 @@
 /**
- * Strength archaeologist insights for IronLogs.
+ * Strength archaeologist insights for Workout.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { groupByDay, findPRs, getSleepProgression } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { groupByDay, findPRs, getSleepProgression } from '@Workout/analytics';
 
 // ─── Strength Archaeologist ─────────────────────────────────
 

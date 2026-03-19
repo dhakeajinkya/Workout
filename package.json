@@ -1,13 +1,13 @@
 {
-  "name": "ironlogs",
+  "name": "Workout",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter @ironlogs/web dev",
-    "build": "pnpm --filter @ironlogs/web build",
-    "lint": "pnpm --filter @ironlogs/web lint",
-    "preview": "pnpm --filter @ironlogs/web preview",
+    "dev": "pnpm --filter @Workout/web dev",
+    "build": "pnpm --filter @Workout/web build",
+    "lint": "pnpm --filter @Workout/web lint",
+    "preview": "pnpm --filter @Workout/web preview",
     "dev:all": "turbo dev",
     "build:all": "turbo build",
     "typecheck": "turbo typecheck",

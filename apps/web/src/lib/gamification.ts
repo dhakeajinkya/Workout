@@ -1,4 +1,4 @@
-// Re-export from @ironlogs/gamification
+// Re-export from @Workout/gamification
 export {
   calcXPProfile,
   calcSkillProfile,
@@ -26,4 +26,4 @@ export {
   type Quest,
   type Season,
   type Insight,
-} from '@ironlogs/gamification';
+} from '@Workout/gamification';

@@ -2,44 +2,44 @@
 
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { parseCSV, validateDataset } from '@ironlogs/csv-parser';
+import { parseCSV, validateDataset } from '@Workout/csv-parser';
 import {
   calcLiftScore, calcOverallScore,
   groupByDay, getLatestBodyweight, getBestRecentSets,
   getAllStrengthVelocities, detectPlateaus, calcFatigue,
   findPRs, getUniqueLifts,
-} from '@ironlogs/analytics';
-import { computeProgram } from '@ironlogs/plugin-api';
-import type { TrainingMaxes } from '@ironlogs/plugin-api';
-import { NSUNS_6DAY_DL_TEMPLATE } from '@ironlogs/plugin-nsuns';
+} from '@Workout/analytics';
+import { computeProgram } from '@Workout/plugin-api';
+import type { TrainingMaxes } from '@Workout/plugin-api';
+import { NSUNS_6DAY_DL_TEMPLATE } from '@Workout/plugin-nsuns';
 
 const args = process.argv.slice(2);
 const command = args[0];
 
 if (!command || command === '--help' || command === '-h') {
   console.log(`
-ironlogs — Open source strength analytics for serious lifters.
+Workout — Open source strength analytics for serious lifters.
 
 Usage:
-  ironlogs analyze <file.csv>                  Analyze a training log
-  ironlogs validate <file.csv>                 Validate CSV format
-  ironlogs report <file.csv> [--output <dir>]  Generate static HTML report
-  ironlogs program <bench> <squat> <dl> <ohp>  Show program with computed weights
-  ironlogs --help                              Show this help
+  Workout analyze <file.csv>                  Analyze a training log
+  Workout validate <file.csv>                 Validate CSV format
+  Workout report <file.csv> [--output <dir>]  Generate static HTML report
+  Workout program <bench> <squat> <dl> <ohp>  Show program with computed weights
+  Workout --help                              Show this help
 
 Examples:
-  ironlogs analyze training.csv
-  ironlogs validate my_data.csv
-  ironlogs report training.csv
-  ironlogs report training.csv --output ./my-report
-  ironlogs program 62.5 80 105 50
+  Workout analyze training.csv
+  Workout validate my_data.csv
+  Workout report training.csv
+  Workout report training.csv --output ./my-report
+  Workout program 62.5 80 105 50
 `);
   process.exit(0);
 }
 
 if (command === 'validate') {
   const file = args[1];
-  if (!file) { console.error('Usage: ironlogs validate <file.csv>'); process.exit(1); }
+  if (!file) { console.error('Usage: Workout validate <file.csv>'); process.exit(1); }
   const text = readFileSync(file, 'utf-8');
   const { entries, errors } = parseCSV(text);
   const validation = validateDataset(entries);
@@ -67,7 +67,7 @@ if (command === 'validate') {
 
 if (command === 'analyze') {
   const file = args[1];
-  if (!file) { console.error('Usage: ironlogs analyze <file.csv>'); process.exit(1); }
+  if (!file) { console.error('Usage: Workout analyze <file.csv>'); process.exit(1); }
   const text = readFileSync(file, 'utf-8');
   const { entries, errors } = parseCSV(text);
 
@@ -86,7 +86,7 @@ if (command === 'analyze') {
     .map((l) => ({ lift: l, ...calcLiftScore(l, best[l].estimated1RM, bw) }));
   const overall = calcOverallScore(liftScores);
 
-  console.log(`\n  IronLogs Analysis`);
+  console.log(`\n  Workout Analysis`);
   console.log(`  ${'═'.repeat(40)}`);
   console.log(`  Sessions: ${sessions.length}`);
   console.log(`  Bodyweight: ${bw}kg`);
@@ -125,7 +125,7 @@ if (command === 'analyze') {
 
 if (command === 'report') {
   const file = args[1];
-  if (!file) { console.error('Usage: ironlogs report <file.csv> [--output <dir>]'); process.exit(1); }
+  if (!file) { console.error('Usage: Workout report <file.csv> [--output <dir>]'); process.exit(1); }
 
   const outputIdx = args.indexOf('--output');
   const outputDir = resolve(outputIdx !== -1 && args[outputIdx + 1] ? args[outputIdx + 1] : './report');
@@ -266,7 +266,7 @@ function generateReportHTML(data: {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IronLogs Report</title>
+<title>Workout Report</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -336,7 +336,7 @@ function generateReportHTML(data: {
 </style>
 </head>
 <body>
-  <h1>IronLogs Report</h1>
+  <h1>Workout Report</h1>
   <p class="subtitle">Generated ${new Date(data.generatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
 
   <div class="card">
@@ -386,7 +386,7 @@ function generateReportHTML(data: {
   ${plateauSection}
   ${fatigueSection}
 
-  <footer>IronLogs -- open source strength analytics</footer>
+  <footer>Workout -- open source strength analytics</footer>
 </body>
 </html>`;
 }
@@ -394,8 +394,8 @@ function generateReportHTML(data: {
 if (command === 'program') {
   const [benchTM, squatTM, dlTM, ohpTM] = args.slice(1).map(Number);
   if (!benchTM || !squatTM || !dlTM || !ohpTM) {
-    console.error('Usage: ironlogs program <bench_tm> <squat_tm> <deadlift_tm> <ohp_tm>');
-    console.error('Example: ironlogs program 62.5 80 105 50');
+    console.error('Usage: Workout program <bench_tm> <squat_tm> <deadlift_tm> <ohp_tm>');
+    console.error('Example: Workout program 62.5 80 105 50');
     process.exit(1);
   }
 

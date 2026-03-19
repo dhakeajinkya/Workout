@@ -26,25 +26,25 @@ importers:
 
   apps/web:
     dependencies:
-      '@ironlogs/analytics':
+      '@Workout/analytics':
         specifier: workspace:*
         version: link:../../packages/analytics
-      '@ironlogs/core':
+      '@Workout/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@ironlogs/csv-parser':
+      '@Workout/csv-parser':
         specifier: workspace:*
         version: link:../../packages/csv-parser
-      '@ironlogs/gamification':
+      '@Workout/gamification':
         specifier: workspace:*
         version: link:../../packages/gamification
-      '@ironlogs/plugin-api':
+      '@Workout/plugin-api':
         specifier: workspace:*
         version: link:../../packages/plugin-api
-      '@ironlogs/plugin-asc-mup':
+      '@Workout/plugin-asc-mup':
         specifier: workspace:*
         version: link:../../plugins/asc-mup
-      '@ironlogs/plugin-nsuns':
+      '@Workout/plugin-nsuns':
         specifier: workspace:*
         version: link:../../plugins/nsuns
       chart.js:
@@ -117,19 +117,19 @@ importers:
 
   cli:
     dependencies:
-      '@ironlogs/analytics':
+      '@Workout/analytics':
         specifier: workspace:*
         version: link:../packages/analytics
-      '@ironlogs/core':
+      '@Workout/core':
         specifier: workspace:*
         version: link:../packages/core
-      '@ironlogs/csv-parser':
+      '@Workout/csv-parser':
         specifier: workspace:*
         version: link:../packages/csv-parser
-      '@ironlogs/plugin-api':
+      '@Workout/plugin-api':
         specifier: workspace:*
         version: link:../packages/plugin-api
-      '@ironlogs/plugin-nsuns':
+      '@Workout/plugin-nsuns':
         specifier: workspace:*
         version: link:../plugins/nsuns
     devDependencies:
@@ -142,10 +142,10 @@ importers:
 
   packages/analytics:
     dependencies:
-      '@ironlogs/core':
+      '@Workout/core':
         specifier: workspace:*
         version: link:../core
-      '@ironlogs/csv-parser':
+      '@Workout/csv-parser':
         specifier: workspace:*
         version: link:../csv-parser
     devDependencies:
@@ -157,7 +157,7 @@ importers:
 
   packages/csv-parser:
     dependencies:
-      '@ironlogs/core':
+      '@Workout/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -167,55 +167,55 @@ importers:
 
   packages/gamification:
     dependencies:
-      '@ironlogs/analytics':
+      '@Workout/analytics':
         specifier: workspace:*
         version: link:../analytics
-      '@ironlogs/core':
+      '@Workout/core':
         specifier: workspace:*
         version: link:../core
-      '@ironlogs/csv-parser':
+      '@Workout/csv-parser':
         specifier: workspace:*
         version: link:../csv-parser
 
   packages/plugin-api:
     dependencies:
-      '@ironlogs/core':
+      '@Workout/core':
         specifier: workspace:*
         version: link:../core
 
   plugins/asc-mup:
     dependencies:
-      '@ironlogs/core':
+      '@Workout/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@ironlogs/plugin-api':
+      '@Workout/plugin-api':
         specifier: workspace:*
         version: link:../../packages/plugin-api
 
   plugins/nsuns:
     dependencies:
-      '@ironlogs/analytics':
+      '@Workout/analytics':
         specifier: workspace:*
         version: link:../../packages/analytics
-      '@ironlogs/core':
+      '@Workout/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@ironlogs/csv-parser':
+      '@Workout/csv-parser':
         specifier: workspace:*
         version: link:../../packages/csv-parser
-      '@ironlogs/plugin-api':
+      '@Workout/plugin-api':
         specifier: workspace:*
         version: link:../../packages/plugin-api
 
   plugins/plugin-template:
     dependencies:
-      '@ironlogs/analytics':
+      '@Workout/analytics':
         specifier: workspace:*
         version: link:../../packages/analytics
-      '@ironlogs/core':
+      '@Workout/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@ironlogs/plugin-api':
+      '@Workout/plugin-api':
         specifier: workspace:*
         version: link:../../packages/plugin-api
 

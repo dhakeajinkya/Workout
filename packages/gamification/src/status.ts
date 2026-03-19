@@ -1,5 +1,5 @@
 /**
- * Training status system for IronLogs.
+ * Training status system for Workout.
  *
  * Communicates training state via animated sprite avatars.
  * Based on readiness score (primary) and streak (modifier).

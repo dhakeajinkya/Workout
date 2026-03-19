@@ -1,9 +1,9 @@
 /**
- * Seasons for IronLogs.
+ * Seasons for Workout.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { groupByDay, findPRs } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { groupByDay, findPRs } from '@Workout/analytics';
 import { calcXPProfile } from './xp.js';
 
 // ─── Seasons ────────────────────────────────────────────────

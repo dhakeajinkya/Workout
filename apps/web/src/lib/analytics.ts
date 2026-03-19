@@ -1,4 +1,4 @@
-// Re-export analytics from @ironlogs/analytics
+// Re-export analytics from @Workout/analytics
 export {
   // Intensity
   getSessionIntensities,
@@ -45,7 +45,7 @@ export {
   // PR Prediction
   predictNextPR,
   type PRPrediction,
-} from '@ironlogs/analytics';
+} from '@Workout/analytics';
 
 // nSuns compliance — from plugin
 export {
@@ -53,4 +53,4 @@ export {
   getComplianceSummary,
   type ComplianceData,
   type ComplianceSummary,
-} from '@ironlogs/plugin-nsuns';
+} from '@Workout/plugin-nsuns';

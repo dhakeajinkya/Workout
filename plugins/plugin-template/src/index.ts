@@ -1,5 +1,5 @@
 /**
- * IronLogs Plugin Template
+ * Workout Plugin Template
  *
  * Copy this directory to create a new plugin. Rename the package in
  * package.json and fill in the sections below.
@@ -7,15 +7,15 @@
  * Each section is optional -- delete any you don't need.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
+import type { LiftEntry } from '@Workout/core';
 import type {
-  IronLogsPlugin,
+  WorkoutPlugin,
   PluginMetric,
   PluginAchievement,
   PluginChart,
   ProgramTemplate,
   PluginImporter,
-} from '@ironlogs/plugin-api';
+} from '@Workout/plugin-api';
 
 // ---------------------------------------------------------------------------
 // Metrics
@@ -119,7 +119,7 @@ const importers: PluginImporter[] = [
 // Plugin definition
 // ---------------------------------------------------------------------------
 
-const plugin: IronLogsPlugin = {
+const plugin: WorkoutPlugin = {
   // TODO: Give your plugin a unique name matching the package name.
   name: 'plugin-template',
   version: '0.1.0',

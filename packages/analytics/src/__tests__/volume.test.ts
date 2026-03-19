@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { LiftEntry } from '@ironlogs/core';
+import type { LiftEntry } from '@Workout/core';
 import { groupByDay, getLatestBodyweight, getAllUniqueLifts } from '../volume.js';
 
 function makeEntry(overrides: Partial<LiftEntry> = {}): LiftEntry {

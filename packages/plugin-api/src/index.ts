@@ -1,4 +1,4 @@
-import type { LiftEntry } from '@ironlogs/core';
+import type { LiftEntry } from '@Workout/core';
 
 /** Metric computed by a plugin */
 export interface PluginMetric {
@@ -218,7 +218,7 @@ export interface PluginImporter {
 export const PLUGIN_API_VERSION = 1;
 
 /** The main plugin interface */
-export interface IronLogsPlugin {
+export interface WorkoutPlugin {
   name: string;
   version: string;
   /** Target API version for forward compatibility checks */
@@ -242,9 +242,9 @@ export interface IronLogsPlugin {
 }
 
 /** Plugin registry */
-const plugins = new Map<string, IronLogsPlugin>();
+const plugins = new Map<string, WorkoutPlugin>();
 
-export function registerPlugin(plugin: IronLogsPlugin): void {
+export function registerPlugin(plugin: WorkoutPlugin): void {
   if (plugin.apiVersion && plugin.apiVersion > PLUGIN_API_VERSION) {
     console.warn(
       `Plugin "${plugin.name}" targets API v${plugin.apiVersion} but runtime is v${PLUGIN_API_VERSION}. ` +
@@ -254,11 +254,11 @@ export function registerPlugin(plugin: IronLogsPlugin): void {
   plugins.set(plugin.name, plugin);
 }
 
-export function getPlugin(name: string): IronLogsPlugin | undefined {
+export function getPlugin(name: string): WorkoutPlugin | undefined {
   return plugins.get(name);
 }
 
-export function getAllPlugins(): IronLogsPlugin[] {
+export function getAllPlugins(): WorkoutPlugin[] {
   return Array.from(plugins.values());
 }
 

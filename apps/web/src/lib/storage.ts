@@ -1,7 +1,7 @@
 import { openDB, type DBSchema } from 'idb';
-import type { LiftEntry } from '@ironlogs/core';
+import type { LiftEntry } from '@Workout/core';
 
-interface IronLogsDB extends DBSchema {
+interface WorkoutDB extends DBSchema {
   lifts: {
     key: number;
     value: LiftEntry & { id?: number; synced?: boolean };
@@ -18,7 +18,7 @@ interface IronLogsDB extends DBSchema {
 }
 
 function getDB() {
-  return openDB<IronLogsDB>('ironlogs', 1, {
+  return openDB<WorkoutDB>('Workout', 1, {
     upgrade(db) {
       const liftStore = db.createObjectStore('lifts', { keyPath: 'id', autoIncrement: true });
       liftStore.createIndex('by-date', 'date');

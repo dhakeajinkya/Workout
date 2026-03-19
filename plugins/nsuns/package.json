@@ -1,5 +1,5 @@
 {
-  "name": "@ironlogs/plugin-nsuns",
+  "name": "@Workout/plugin-nsuns",
   "version": "0.1.0",
   "type": "module",
   "main": "src/index.ts",
@@ -8,9 +8,9 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@ironlogs/core": "workspace:*",
-    "@ironlogs/csv-parser": "workspace:*",
-    "@ironlogs/analytics": "workspace:*",
-    "@ironlogs/plugin-api": "workspace:*"
+    "@Workout/core": "workspace:*",
+    "@Workout/csv-parser": "workspace:*",
+    "@Workout/analytics": "workspace:*",
+    "@Workout/plugin-api": "workspace:*"
   }
 }

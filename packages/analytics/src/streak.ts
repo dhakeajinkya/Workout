@@ -1,4 +1,4 @@
-import type { DaySession } from '@ironlogs/core';
+import type { DaySession } from '@Workout/core';
 
 export interface WeeklyStreak {
   /** Consecutive completed weeks (not counting current week) */

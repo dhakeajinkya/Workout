@@ -1,4 +1,4 @@
-# IronLogs Gamification System
+# Workout Gamification System
 
 Technical documentation for the XP, leveling, skill, and character systems.
 

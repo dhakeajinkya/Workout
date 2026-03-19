@@ -49,7 +49,7 @@ export default function NavBar() {
   return (
     <>
       <nav className="navbar">
-        <Link to="/" className="navbar-brand">IronLogs</Link>
+        <Link to="/" className="navbar-brand">Workout</Link>
 
         <div className="navbar-links">
           {PRIMARY_LINKS.map((link) => (
@@ -89,7 +89,7 @@ export default function NavBar() {
 
       <div className={`navbar-mobile-menu${mobileOpen ? ' open' : ''}`}>
         <div className="navbar-mobile-header">
-          <Link to="/" className="navbar-brand" onClick={() => setMobileOpen(false)}>IronLogs</Link>
+          <Link to="/" className="navbar-brand" onClick={() => setMobileOpen(false)}>Workout</Link>
           <button className="navbar-mobile-close" onClick={() => setMobileOpen(false)} aria-label="Close menu">✕</button>
         </div>
         <div className="navbar-mobile-links">

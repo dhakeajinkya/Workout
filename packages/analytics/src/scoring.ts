@@ -1,4 +1,4 @@
-import type { StrengthLevel } from '@ironlogs/core';
+import type { StrengthLevel } from '@Workout/core';
 
 export type Sex = 'male' | 'female';
 

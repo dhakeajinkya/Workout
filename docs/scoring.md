@@ -1,6 +1,6 @@
 # Scoring Pipeline
 
-IronLogs converts raw sets into a normalized 0-125+ strength score that accounts for bodyweight, age, sex, and lift type. The pipeline lives in `packages/analytics/src/scoring.ts` and `packages/analytics/src/e1rm.ts`.
+Workout converts raw sets into a normalized 0-125+ strength score that accounts for bodyweight, age, sex, and lift type. The pipeline lives in `packages/analytics/src/scoring.ts` and `packages/analytics/src/e1rm.ts`.
 
 ## Step-by-Step Pipeline
 

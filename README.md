@@ -1,22 +1,22 @@
-# IronLogs
+# Workout
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Deploy](https://github.com/spinalshock/ironlogs/actions/workflows/deploy.yml/badge.svg)](https://github.com/spinalshock/ironlogs/actions/workflows/deploy.yml)
+[![Deploy](https://github.com/spinalshock/Workout/actions/workflows/deploy.yml/badge.svg)](https://github.com/spinalshock/Workout/actions/workflows/deploy.yml)
 
-**IronLogs** is a **local-first strength training analytics engine** and **serverless Progressive Web App** for lifters who want to own their data.
+**Workout** is a **local-first strength training analytics engine** and **serverless Progressive Web App** for lifters who want to own their data.
 
 It turns a simple CSV workout log into detailed strength analytics, fatigue monitoring, progress tracking, and gamified training insights — all without accounts, servers, or databases.
 
 Think **Git for strength training logs**.
 
 <!-- TODO: Add demo GIF here -->
-<!-- ![IronLogs Demo](docs/screenshots/demo.gif) -->
+<!-- ![Workout Demo](docs/screenshots/demo.gif) -->
 
 ---
 
 ## Quick Start (No Install)
 
-1. Open **[spinalshock.github.io/ironlogs](https://spinalshock.github.io/ironlogs/)**
+1. Open **[spinalshock.github.io/Workout](https://spinalshock.github.io/Workout/)**
 2. Upload your training CSV
 3. See strength trends, PR detection, fatigue indicators, and achievements
 
@@ -24,7 +24,7 @@ No account required. No data leaves your browser.
 
 ---
 
-## Why IronLogs Exists
+## Why Workout Exists
 
 Most workout apps:
 
@@ -33,7 +33,7 @@ Most workout apps:
 - Hide insights behind paywalls
 - Export messy, non-standard CSVs
 
-IronLogs solves this:
+Workout solves this:
 
 - **CSV is the source of truth** — a plain text file you own
 - **Everything runs locally** — no servers, no tracking
@@ -52,7 +52,7 @@ IronLogs solves this:
 <!-- ![Muscle Map](docs/screenshots/muscle-map.png) -->
 <!-- ![Achievements](docs/screenshots/achievements.png) -->
 
-*Screenshots coming soon. See the [live demo](https://spinalshock.github.io/ironlogs/) in the meantime.*
+*Screenshots coming soon. See the [live demo](https://spinalshock.github.io/Workout/) in the meantime.*
 
 ---
 
@@ -165,7 +165,7 @@ date,bodyweight,lift,weight,reps,set_type,notes,sleep
 Modular **monorepo** — analytics are completely independent of the UI.
 
 ```
-ironlogs/
+Workout/
 ├── apps/
 │   └── web/                  # React 19 PWA dashboard
 ├── packages/
@@ -221,13 +221,13 @@ core → csv-parser → analytics → gamification
 ## CLI
 
 ```bash
-ironlogs analyze training.csv    # Terminal analytics
-ironlogs report training.csv     # Generate static HTML dashboard
-ironlogs validate training.csv   # Check CSV format
+Workout analyze training.csv    # Terminal analytics
+Workout report training.csv     # Generate static HTML dashboard
+Workout validate training.csv   # Check CSV format
 ```
 
 ```
-  IronLogs Analysis
+  Workout Analysis
   ════════════════════════════════════════
   Sessions: 337
   Bodyweight: 81.6kg
@@ -253,8 +253,8 @@ ironlogs validate training.csv   # Check CSV format
 ### 1. Clone
 
 ```bash
-git clone https://github.com/spinalshock/ironlogs.git
-cd ironlogs
+git clone https://github.com/spinalshock/Workout.git
+cd Workout
 ```
 
 ### 2. Install
@@ -269,7 +269,7 @@ pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:5173/ironlogs/](http://localhost:5173/ironlogs/)
+Open [http://localhost:5173/Workout/](http://localhost:5173/Workout/)
 
 ### 4. Analyze your data
 
@@ -280,8 +280,8 @@ Drop your CSV into `apps/web/public/data/lifts.csv` — or drag and drop in the 
 ## Testing
 
 ```bash
-pnpm --filter @ironlogs/analytics test:run
-pnpm --filter @ironlogs/csv-parser test:run
+pnpm --filter @Workout/analytics test:run
+pnpm --filter @Workout/csv-parser test:run
 ```
 
 ---
@@ -345,7 +345,7 @@ Areas that need help:
 - Importer support for more apps
 - Documentation
 
-Check the [Good First Issues](https://github.com/spinalshock/ironlogs/labels/good%20first%20issue) to get started.
+Check the [Good First Issues](https://github.com/spinalshock/Workout/labels/good%20first%20issue) to get started.
 
 ---
 
@@ -363,7 +363,7 @@ Check the [Good First Issues](https://github.com/spinalshock/ironlogs/labels/goo
 
 Most fitness apps lock your data behind accounts and subscriptions.
 
-IronLogs keeps things simple:
+Workout keeps things simple:
 
 - Your data is a CSV file
 - Everything runs locally

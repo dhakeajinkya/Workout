@@ -1,4 +1,4 @@
-// Re-export scoring from @ironlogs/analytics
+// Re-export scoring from @Workout/analytics
 export {
   estimate1RM,
   calcLiftScore,
@@ -13,7 +13,7 @@ export {
   SCORING_CATEGORIES,
   LIFT_MUSCLE_MAP,
   type Sex,
-} from '@ironlogs/analytics';
+} from '@Workout/analytics';
 
 // normalizeLiftName lives in csv-parser
-export { normalizeLiftName } from '@ironlogs/csv-parser';
+export { normalizeLiftName } from '@Workout/csv-parser';

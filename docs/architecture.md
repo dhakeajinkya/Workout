@@ -2,7 +2,7 @@
 
 ## Philosophy
 
-IronLogs is a personal strength tracking PWA built on these principles:
+Workout is a personal strength tracking PWA built on these principles:
 
 1. **User-first** — Every feature serves the lifter's daily workflow
 2. **Data-local** — No server, no database, no accounts. CSV + git = version control
@@ -13,7 +13,7 @@ IronLogs is a personal strength tracking PWA built on these principles:
 ## Monorepo Structure
 
 ```
-ironlogs/
+Workout/
   apps/
     demo/                 # Demo app
     web/                  # React 19 + Vite frontend (the PWA)
@@ -104,7 +104,7 @@ React Router with lazy-loaded pages. All routes defined in `App.tsx`:
 
 GitHub Pages via GitHub Actions (`.github/workflows/deploy.yml`):
 - Push to `main` → auto-deploy
-- Base path: `/ironlogs/`
+- Base path: `/Workout/`
 - SPA redirect hack in `index.html` for client-side routing on GH Pages
 
 ## PWA Configuration

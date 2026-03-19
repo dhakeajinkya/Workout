@@ -1,6 +1,6 @@
-# IronLogs Plugin Template
+# Workout Plugin Template
 
-Use this template as a starting point for creating a new IronLogs plugin.
+Use this template as a starting point for creating a new Workout plugin.
 
 ## Quick Start
 
@@ -10,15 +10,15 @@ Use this template as a starting point for creating a new IronLogs plugin.
    ```
 
 2. Update `package.json`:
-   - Change `name` to `@ironlogs/plugin-my-plugin`
-   - Adjust dependencies (remove `@ironlogs/analytics` if unused, add `@ironlogs/csv-parser` if needed)
+   - Change `name` to `@Workout/plugin-my-plugin`
+   - Adjust dependencies (remove `@Workout/analytics` if unused, add `@Workout/csv-parser` if needed)
 
 3. Edit `src/index.ts`:
    - Update the plugin `name` and `description`
    - Implement the sections you need (metrics, charts, achievements, programs, importers)
    - Delete any sections you don't use
 
-4. Register the plugin in the main app by calling `registerPlugin()` from `@ironlogs/plugin-api`.
+4. Register the plugin in the main app by calling `registerPlugin()` from `@Workout/plugin-api`.
 
 ## Plugin Capabilities
 

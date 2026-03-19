@@ -1,4 +1,4 @@
-import { CANONICAL_LIFTS, LIFT_ALIASES } from '@ironlogs/core';
+import { CANONICAL_LIFTS, LIFT_ALIASES } from '@Workout/core';
 
 /**
  * Normalize any lift name to its canonical form.

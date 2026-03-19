@@ -1,4 +1,4 @@
-import type { LiftEntry } from '@ironlogs/core';
+import type { LiftEntry } from '@Workout/core';
 
 export interface ValidationResult {
   valid: boolean;

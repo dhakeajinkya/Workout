@@ -1,9 +1,9 @@
 /**
- * Ranks for IronLogs.
+ * Ranks for Workout.
  */
 
-import type { LiftEntry } from '@ironlogs/core';
-import { calcLiftScore, calcOverallScore, getBestRecentSets, getLatestBodyweight } from '@ironlogs/analytics';
+import type { LiftEntry } from '@Workout/core';
+import { calcLiftScore, calcOverallScore, getBestRecentSets, getLatestBodyweight } from '@Workout/analytics';
 
 // ─── Rank (Score-based) ─────────────────────────────────────
 

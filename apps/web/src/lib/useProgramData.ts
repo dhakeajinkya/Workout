@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { computeProgram } from '@ironlogs/plugin-api';
-import type { ComputedDay, ProgramTemplate } from '@ironlogs/plugin-api';
-import { NSUNS_6DAY_DL_TEMPLATE } from '@ironlogs/plugin-nsuns';
-import { ASC_MUP_TEMPLATE } from '@ironlogs/plugin-asc-mup';
+import { computeProgram } from '@Workout/plugin-api';
+import type { ComputedDay, ProgramTemplate } from '@Workout/plugin-api';
+import { NSUNS_6DAY_DL_TEMPLATE } from '@Workout/plugin-nsuns';
+import { ASC_MUP_TEMPLATE } from '@Workout/plugin-asc-mup';
 import { USER_CONFIG } from '../config';
 
 const PROGRAM_MAP: Record<string, ProgramTemplate> = {

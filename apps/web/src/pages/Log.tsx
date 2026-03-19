@@ -4,7 +4,7 @@ import { normalizeLiftName } from '../lib/scoring';
 import { useLifts, groupByDay, calcWeeklyStreak } from '../lib/useLifts';
 import { calcXPProfile } from '../lib/gamification';
 import { useProgramData } from '../lib/useProgramData';
-import type { ComputedDay } from '@ironlogs/plugin-api';
+import type { ComputedDay } from '@Workout/plugin-api';
 import WorkoutComplete from '../components/WorkoutComplete';
 
 interface ProgramSet {
@@ -161,7 +161,7 @@ function createEmptyExercise(lift: string): WorkoutExercise {
   };
 }
 
-const SESSION_KEY = 'ironlogs-log-session';
+const SESSION_KEY = 'Workout-log-session';
 
 interface SavedSession {
   exercises: WorkoutExercise[];
@@ -352,7 +352,7 @@ export default function Log() {
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = `ironlogs-${date}.csv`;
+    a.href = url; a.download = `Workout-${date}.csv`;
     a.click(); URL.revokeObjectURL(url);
     // Clear IndexedDB after successful export
     await clearLocalLifts();
