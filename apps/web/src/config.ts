@@ -1,5 +1,5 @@
 export const USER_CONFIG = {
-  name: 'Om',
+  name: 'Ajinkya',
   age: 30,
   sex: 'male' as const,
   units: 'kg' as const,
@@ -8,7 +8,7 @@ export const USER_CONFIG = {
   program: 'nsuns-6day-dl-lp' as const,
   /** When this program started (ISO date). Used for block resolution in
    *  periodized programs; informational for flat programs like nSuns. */
-  programStartDate: '2026-02-09',
+  programStartDate: '2026-03-19',
   /** Rounding factor for computed weights (kg) */
   roundTo: 5,
   /** Training maxes — increase by 2.5kg on successful AMRAP each week.
